@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+build
+coverage
+package-lock.json
+next-env.d.ts
+*.min.js
+public
+
+# Chief-owned contract docs — do not reformat
+PROGRAM.md
+TASKS.md
