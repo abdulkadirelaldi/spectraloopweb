@@ -1,26 +1,72 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------ *
+ * Design tokens — Spectraloop (Tailwind v4, CSS-first)
+ * Brand: electric blue + cyan accent (hyperloop / speed / tech).
+ * Brand + accent scales are static; surface tokens swap for dark mode.
+ * ------------------------------------------------------------------ */
+@theme {
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #dae6ff;
+  --color-brand-200: #bcd2ff;
+  --color-brand-300: #8eb3ff;
+  --color-brand-400: #598aff;
+  --color-brand-500: #3366ff;
+  --color-brand-600: #1f47e6;
+  --color-brand-700: #1a37b8;
+  --color-brand-800: #1b3291;
+  --color-brand-900: #1c2f73;
+  --color-brand: #3366ff;
+
+  --color-accent-400: #22d3ee;
+  --color-accent-500: #06b6d4;
+  --color-accent: #06b6d4;
 }
 
+/* Semantic surface tokens — mapped inline so utilities resolve to the
+   CSS variables below, letting dark mode swap them at runtime. */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+:root {
+  --background: #f6f8fb;
+  --foreground: #0d1526;
+  --surface: #ffffff;
+  --muted: #5b6b85;
+  --border: #e4e9f2;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0a0f1a;
+    --foreground: #e7ecf5;
+    --surface: #111827;
+    --muted: #94a3b8;
+    --border: #1f2a3d;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Respect users who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
