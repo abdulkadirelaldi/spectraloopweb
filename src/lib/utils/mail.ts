@@ -97,3 +97,40 @@ export async function notifyNewApplication(input: {
     replyTo: input.email,
   });
 }
+
+/**
+ * Forward a contact-form ("İletişim") message to the team. No-op (soft-skip)
+ * when `TEAM_NOTIFY_EMAIL` or `RESEND_API_KEY` is missing. Reuses the same env
+ * keys as {@link notifyNewApplication}.
+ */
+export async function notifyContactMessage(input: {
+  name: string;
+  email: string;
+  subject?: string;
+  message: string;
+}): Promise<SendMailResult> {
+  if (!TEAM_NOTIFY_EMAIL) {
+    return { sent: false, skippedReason: "missing TEAM_NOTIFY_EMAIL" };
+  }
+
+  const text = [
+    "Yeni bir iletişim mesajı alındı:",
+    "",
+    `İsim:     ${input.name}`,
+    `E-posta:  ${input.email}`,
+    `Konu:     ${input.subject ?? "(belirtilmedi)"}`,
+    "",
+    "Mesaj:",
+    input.message,
+  ].join("\n");
+
+  return sendMail({
+    to: TEAM_NOTIFY_EMAIL,
+    subject: input.subject
+      ? `İletişim: ${input.subject}`
+      : `İletişim mesajı: ${input.name}`,
+    text,
+    // Let the team reply straight to the sender.
+    replyTo: input.email,
+  });
+}
