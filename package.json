@@ -11,7 +11,8 @@
     "format:check": "prettier --check .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "seed:sponsors": "tsx src/lib/utils/seedSponsors.ts"
   },
   "dependencies": {
     "mongoose": "^9.7.3",
@@ -32,6 +33,7 @@
     "prettier": "3.9.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss": "^4",
+    "tsx": "^4.22.5",
     "typescript": "^5",
     "vitest": "^4.1.9"
   }
