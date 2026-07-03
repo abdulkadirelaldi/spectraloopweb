@@ -30,8 +30,8 @@ oldukları için sırayla ilerler.
 | 1.B1 | Application (Bize Katıl) API sözleşmesi + endpoint + Resend bildirimi + kısa doküman | Backend | done | 0.4 |
 | 1.B2 | Contact (İletişim) API sözleşmesi + endpoint + Resend + doküman | Backend | done | 0.4 |
 | 1.B3 | Sponsors read API + seed veri + sözleşme dokümanı | Backend | done | 0.4 |
-| 1.B4 | Announcements/News read API + sözleşme dokümanı | Backend | in-progress | 0.4 |
-| 1.1 | Public shell: Header/Nav + Footer + temel UI primitifleri (Button, Card, Container, Section) | Frontend | todo | 0.3 |
+| 1.B4 | Announcements/News read API + sözleşme dokümanı | Backend | done | 0.4 |
+| 1.1 | Public shell: Header/Nav + Footer + temel UI primitifleri (Button, Card, Container, Section) | Frontend | in-progress | 0.3 |
 | 1.2 | Ana Sayfa (hero + istatistikler + sponsor şeridi + CTA) | Frontend | todo | 1.1, 1.B3 |
 | 1.3 | Hakkımızda/Takım + Alt Ekipler sayfaları | Frontend | todo | 1.1 |
 | 1.4 | Araç/Teknoloji + Başarılar (2022→2026 zaman çizelgesi) sayfaları | Frontend | todo | 1.1 |
@@ -63,6 +63,10 @@ oldukları için sırayla ilerler.
 - **API sözleşmesi (Frontend'e — 1.2):** GET `/api/sponsors` → `200 {ok:true, sponsors: Sponsor[]}`,
   tier sırasıyla (gold→silver→bronze), `revalidate=300`; hata `500 {ok:false,error}`.
   Seed: `npm run seed:sponsors` (örnek veri ekler). Detay: api/sponsors/README.md.
+- **API sözleşmesi (Frontend'e — 1.6):** GET `/api/announcements` → `200 {ok:true,
+  announcements: Announcement[]}`, `createdAt DESC`, SADECE `publishedToPublic:true`,
+  `revalidate=300`; hata `500 {ok:false,error}`. Seed: `npm run seed:announcements`.
+  Detay: api/announcements/README.md.
 
 ### Değişiklik günlüğü
 - 2026-07-02 — Şef: TASKS.md oluşturuldu. Faz 0 + Faz 1 planlandı. 0.1 açıldı (todo).
@@ -81,3 +85,6 @@ oldukları için sırayla ilerler.
   yeni env yok). 1.B3 açıldı (Backend — Sponsors read API). Push edildi.
 - 2026-07-03 — Şef: 1.B3 done (sponsors GET + seed, tsx dev dep, revalidate 300).
   1.B4 açıldı (Backend — News/Announcements read API). Push edildi.
+- 2026-07-03 — Şef: 1.B4 done (announcements GET, publishedToPublic filtresi, seed).
+  **Tüm Faz 1 Backend sözleşmeleri hazır.** Worker sırası Frontend'e geçti;
+  1.1 açıldı (Frontend — public shell). Push edildi.
