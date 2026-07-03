@@ -12,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "seed:sponsors": "tsx src/lib/utils/seedSponsors.ts"
+    "seed:sponsors": "tsx src/lib/utils/seedSponsors.ts",
+    "seed:announcements": "tsx src/lib/utils/seedAnnouncements.ts"
   },
   "dependencies": {
     "mongoose": "^9.7.3",
