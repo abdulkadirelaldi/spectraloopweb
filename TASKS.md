@@ -28,8 +28,8 @@ oldukları için sırayla ilerler.
 | id | görev | agent | durum | bağımlılık |
 |----|-------|-------|-------|------------|
 | 1.B1 | Application (Bize Katıl) API sözleşmesi + endpoint + Resend bildirimi + kısa doküman | Backend | done | 0.4 |
-| 1.B2 | Contact (İletişim) API sözleşmesi + endpoint + Resend + doküman | Backend | in-progress | 0.4 |
-| 1.B3 | Sponsors read API + seed veri + sözleşme dokümanı | Backend | todo | 0.4 |
+| 1.B2 | Contact (İletişim) API sözleşmesi + endpoint + Resend + doküman | Backend | done | 0.4 |
+| 1.B3 | Sponsors read API + seed veri + sözleşme dokümanı | Backend | in-progress | 0.4 |
 | 1.B4 | Announcements/News read API + sözleşme dokümanı | Backend | todo | 0.4 |
 | 1.1 | Public shell: Header/Nav + Footer + temel UI primitifleri (Button, Card, Container, Section) | Frontend | todo | 0.3 |
 | 1.2 | Ana Sayfa (hero + istatistikler + sponsor şeridi + CTA) | Frontend | todo | 1.1, 1.B3 |
@@ -56,6 +56,10 @@ oldukları için sırayla ilerler.
 - **API sözleşmesi (Frontend'e — 1.5/1.7):** POST `/api/applications`,
   body `{name,email,subteamPref,message}` (hepsi zorunlu), başarı `201 {ok:true,id}`,
   hata `400/500 {ok:false,error}`. Mail best-effort. Detay: api/applications/README.md.
+- **API sözleşmesi (Frontend'e — 1.6):** POST `/api/contact`, body
+  `{name, email, subject?, message}` (subject opsiyonel), başarı `201 {ok:true}`
+  (id yok — kalıcı kayıt yok), hata `400 {ok:false,error}`. Detay: api/contact/README.md.
+  Paylaşılan mail helper: src/lib/utils/mail.ts.
 
 ### Değişiklik günlüğü
 - 2026-07-02 — Şef: TASKS.md oluşturuldu. Faz 0 + Faz 1 planlandı. 0.1 açıldı (todo).
@@ -70,3 +74,5 @@ oldukları için sırayla ilerler.
   **FAZ 1 (Public Site) açıldı.** İlk görev 1.B1 (Backend — Application API).
 - 2026-07-02 — Şef: 1.B1 done (applications API + Resend, resend ^6.16.0). Yeni env:
   MAIL_FROM + TEAM_NOTIFY_EMAIL → 1.Q1'e taşındı. 1.B2 açıldı (Backend — Contact API).
+- 2026-07-03 — Şef: 1.B2 done (contact API, mail-only, paylaşılan mail.ts helper,
+  yeni env yok). 1.B3 açıldı (Backend — Sponsors read API). Push edildi.
