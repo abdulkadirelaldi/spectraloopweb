@@ -31,8 +31,8 @@ oldukları için sırayla ilerler.
 | 1.B2 | Contact (İletişim) API sözleşmesi + endpoint + Resend + doküman | Backend | done | 0.4 |
 | 1.B3 | Sponsors read API + seed veri + sözleşme dokümanı | Backend | done | 0.4 |
 | 1.B4 | Announcements/News read API + sözleşme dokümanı | Backend | done | 0.4 |
-| 1.1 | Public shell: Header/Nav + Footer + temel UI primitifleri (Button, Card, Container, Section) | Frontend | in-progress | 0.3 |
-| 1.2 | Ana Sayfa (hero + istatistikler + sponsor şeridi + CTA) | Frontend | todo | 1.1, 1.B3 |
+| 1.1 | Public shell: Header/Nav + Footer + temel UI primitifleri (Button, Card, Container, Section) | Frontend | done | 0.3 |
+| 1.2 | Ana Sayfa (hero + istatistikler + sponsor şeridi + CTA) | Frontend | in-progress | 1.1, 1.B3 |
 | 1.3 | Hakkımızda/Takım + Alt Ekipler sayfaları | Frontend | todo | 1.1 |
 | 1.4 | Araç/Teknoloji + Başarılar (2022→2026 zaman çizelgesi) sayfaları | Frontend | todo | 1.1 |
 | 1.5 | Sponsorluk sayfası (kademeler + indirilebilir PDF + form) | Frontend | todo | 1.1, 1.B1 |
@@ -68,6 +68,15 @@ oldukları için sırayla ilerler.
   `revalidate=300`; hata `500 {ok:false,error}`. Seed: `npm run seed:announcements`.
   Detay: api/announcements/README.md.
 
+### UI primitifleri (1.1 çıktısı — Frontend sayfa görevleri okusun)
+- Import: `@/components/ui` (barrel index.ts). `cn` helper: `@/components/ui/cn`.
+- `Button` — polymorphic: `ButtonAsButton | ButtonAsLink` (href verilirse link/`<a>`,
+  yoksa `<button>`); variant/size prop'ları component'te. `Card` (`interactive?`),
+  `Section` (`muted?`), `Container`, `Badge` (`variant`). Hepsi HTMLAttributes yayar.
+- Public shell: `(public)/layout.tsx` Header+Footer sarar. Nav linkleri:
+  `src/components/public/nav-links.ts`. Marka renkleri: `--color-brand-50..900`
+  (globals.css `@theme`). Ana sayfa placeholder: `(public)/page.tsx` (1.2 dolduracak).
+
 ### Değişiklik günlüğü
 - 2026-07-02 — Şef: TASKS.md oluşturuldu. Faz 0 + Faz 1 planlandı. 0.1 açıldı (todo).
 - 2026-07-02 — Şef: 0.1 done (scaffold diskte doğrulandı, 2 commit). 0.2 açıldı (Backend).
@@ -88,3 +97,5 @@ oldukları için sırayla ilerler.
 - 2026-07-03 — Şef: 1.B4 done (announcements GET, publishedToPublic filtresi, seed).
   **Tüm Faz 1 Backend sözleşmeleri hazır.** Worker sırası Frontend'e geçti;
   1.1 açıldı (Frontend — public shell). Push edildi.
+- 2026-07-03 — Şef: 1.1 done (public shell + UI primitifleri, marka tokenları,
+  build temiz, route çakışması yok). 1.2 açıldı (Frontend — Ana Sayfa). Push edildi.
