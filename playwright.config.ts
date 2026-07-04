@@ -23,5 +23,13 @@ export default defineConfig({
     url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
+    // Auth.js needs a secret to boot its endpoints in CI. A throwaway value is
+    // fine here — the panel-protection E2E only exercises the cookie-presence
+    // gate, not token decoding. Real secrets live in .env.local / CI secrets.
+    env: {
+      AUTH_SECRET:
+        process.env.AUTH_SECRET ?? "e2e-test-secret-not-for-production-0000",
+      NEXTAUTH_URL: process.env.NEXTAUTH_URL ?? baseURL,
+    },
   },
 });
