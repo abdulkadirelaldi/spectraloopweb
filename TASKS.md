@@ -33,8 +33,8 @@ oldukları için sırayla ilerler.
 | 1.B4 | Announcements/News read API + sözleşme dokümanı | Backend | done | 0.4 |
 | 1.1 | Public shell: Header/Nav + Footer + temel UI primitifleri (Button, Card, Container, Section) | Frontend | done | 0.3 |
 | 1.2 | Ana Sayfa (hero + istatistikler + sponsor şeridi + CTA) | Frontend | done | 1.1, 1.B3 |
-| 1.3 | Hakkımızda/Takım + Alt Ekipler sayfaları | Frontend | in-progress | 1.1 |
-| 1.4 | Araç/Teknoloji + Başarılar (2022→2026 zaman çizelgesi) sayfaları | Frontend | todo | 1.1 |
+| 1.3 | Hakkımızda/Takım + Alt Ekipler sayfaları | Frontend | done | 1.1 |
+| 1.4 | Araç/Teknoloji + Başarılar (2022→2026 zaman çizelgesi) sayfaları | Frontend | in-progress | 1.1 |
 | 1.5 | Sponsorluk sayfası (kademeler + indirilebilir PDF + form) | Frontend | todo | 1.1, 1.B1 |
 | 1.6 | Haberler/Medya + İletişim sayfaları (form → 1.B2) | Frontend | todo | 1.1, 1.B2, 1.B4 |
 | 1.7 | Bize Katıl (başvuru formu → 1.B1) sayfası | Frontend | todo | 1.1, 1.B1 |
@@ -102,3 +102,6 @@ oldukları için sırayla ilerler.
 - 2026-07-03 — Şef: 1.2 done (Ana Sayfa: Hero/Stats/SponsorStrip/CtaBand,
   SponsorStrip server component /api/sponsors tüketiyor, build temiz).
   1.3 açıldı (Frontend — Hakkımızda + Ekipler). Push edildi.
+- 2026-07-03 — Şef: 1.3 done (/hakkimizda + /ekipler statik, yeni bileşenler
+  PageHero/SubteamCard/TeamMemberCard, build temiz). 1.4 açıldı (Frontend —
+  Araç + Başarılar timeline). Push edildi.
