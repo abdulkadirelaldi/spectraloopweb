@@ -42,6 +42,32 @@ oldukları için sırayla ilerler.
 | 1.B5 | zod şemalarını route'lara bağla: `/api/applications` + `/api/contact` içindeki el-yazımı `validate()` yerine `@/lib/validation` şemaları (TODO(1.Q1) kancaları) | Backend | done | 1.Q1 |
 | 1.Q2 | Public smoke/E2E testleri (sayfalar yükleniyor + form submit akışı) | Güvenlik & QA | done | 1.2–1.7, 1.B5 |
 
+## Faz 2 — Auth + Panel Çekirdek (AKTİF)
+
+> PROGRAM §10 sırası: Auth.js + RBAC + testleri (Güvenlik & QA lider) → panel
+> API'leri (Backend) → panel UI (Frontend). Kural: auth kur → auth testini yaz → panel.
+> Teknik ön koşul: authorize() User modeline muhtaç → 2.B1 (Backend model) önce gelir.
+> Deploy şimdilik ertelendi (Faz 1 sonrası karar: Faz 2'ye geçildi).
+
+| id | görev | agent | durum | bağımlılık |
+|----|-------|-------|-------|------------|
+| 2.B1 | User + Subteam Mongoose modelleri (passwordHash, role, active, subteam) + admin seed script (bcrypt hash) | Backend | in-progress | 0.4 |
+| 2.S1 | Auth.js kurulumu: Credentials provider + authorize (User+bcrypt) + JWT/session'da rol + AUTH_SECRET + api/auth/[...nextauth] | Güvenlik & QA | todo | 2.B1 |
+| 2.S2 | RBAC helper'ları (rol kontrol) + panel route koruma (proxy.ts /panel/**) + auth & RBAC testleri (giriş, yetkisiz erişim reddi) | Güvenlik & QA | todo | 2.S1 |
+| 2.F1 | Panel shell: `(panel)/panel` layout + nav + dashboard + oturum durumu/çıkış | Frontend | todo | 2.S2 |
+| 2.B2 | Panel API: announcements write (CRUD) + RBAC (lead+ yayınlar) | Backend | todo | 2.S2 |
+| 2.B3 | Panel API: tasks CRUD (birim bazlı) + RBAC | Backend | todo | 2.S2 |
+| 2.B4 | Panel API: members (üye dizini oku + admin CRUD) + RBAC | Backend | todo | 2.S2 |
+| 2.B5 | Panel API: documents (metadata; R2 upload ayrı değerlendirilecek) + events + RBAC | Backend | todo | 2.S2 |
+| 2.F2 | Panel: Duyurular (liste + oluştur/yayınla) | Frontend | todo | 2.F1, 2.B2 |
+| 2.F3 | Panel: Görevler (birim bazlı Kanban/liste) | Frontend | todo | 2.F1, 2.B3 |
+| 2.F4 | Panel: Üye dizini | Frontend | todo | 2.F1, 2.B4 |
+| 2.F5 | Panel: Dokümanlar + Etkinlik/Takvim | Frontend | todo | 2.F1, 2.B5 |
+| 2.Q1 | Panel RBAC E2E: rol bazlı erişim, yetkisiz reddi (admin/lead/member) | Güvenlik & QA | todo | 2.F2–2.F5 |
+
+> Not: Faz 2 planı canlı — görevler ilerledikçe (özellikle panel API/UI) bölünüp
+> rafine edilebilir. R2 dosya yükleme karmaşıksa Faz 3'e kaydırılabilir.
+
 ---
 ### Scaffold gerçekleri (0.1 çıktısı — tüm agent'lar okusun)
 - Next.js **16.2.10**, App Router, `src/` dizini, import alias `@/*`.
@@ -136,3 +162,6 @@ oldukları için sırayla ilerler.
 - 2026-07-03 — Şef: 1.Q2 done (19 E2E testi yeşil: public smoke + navigasyon +
   form akışları mock'lu). **🎉 FAZ 1 (PUBLIC SİTE) TAMAMEN TAMAMLANDI.**
   Karar bekliyor: (A) Vercel deploy mi, (B) Faz 2 (Auth+Panel) mi. Push edildi.
+- 2026-07-03 — Kullanıcı kararı: **Faz 2 (Auth + Panel)**. Deploy ertelendi.
+  Şef: Faz 2 planı eklendi (13 görev). 2.B1 açıldı (Backend — User/Subteam modelleri +
+  admin seed), ardından liderlik QA'ya (auth) geçecek. Push edildi.
