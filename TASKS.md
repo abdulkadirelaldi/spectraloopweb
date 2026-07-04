@@ -52,8 +52,9 @@ oldukları için sırayla ilerler.
 | id | görev | agent | durum | bağımlılık |
 |----|-------|-------|-------|------------|
 | 2.B1 | User + Subteam Mongoose modelleri (passwordHash, role, active, subteam) + admin seed script (bcrypt hash) | Backend | done | 0.4 |
-| 2.S1 | Auth.js kurulumu: Credentials provider + authorize (User+bcrypt) + JWT/session'da rol + AUTH_SECRET + api/auth/[...nextauth] | Güvenlik & QA | in-progress | 2.B1 |
-| 2.S2 | RBAC helper'ları (rol kontrol) + panel route koruma (proxy.ts /panel/**) + auth & RBAC testleri (giriş, yetkisiz erişim reddi) | Güvenlik & QA | todo | 2.S1 |
+| 2.S1 | Auth.js kurulumu: Credentials provider + authorize (User+bcrypt) + JWT/session'da rol + AUTH_SECRET + api/auth/[...nextauth] | Güvenlik & QA | done | 2.B1 |
+| 2.S2 | RBAC helper'ları (rol kontrol) + panel route koruma (proxy.ts /panel/**) + auth & RBAC testleri (giriş, yetkisiz erişim reddi) | Güvenlik & QA | in-progress | 2.S1 |
+| 2.F0 | Giriş sayfası UI (`/giris`) — Auth.js signIn ile Credentials formu | Frontend | todo | 2.S1 |
 | 2.F1 | Panel shell: `(panel)/panel` layout + nav + dashboard + oturum durumu/çıkış | Frontend | todo | 2.S2 |
 | 2.B2 | Panel API: announcements write (CRUD) + RBAC (lead+ yayınlar) | Backend | todo | 2.S2 |
 | 2.B3 | Panel API: tasks CRUD (birim bazlı) + RBAC | Backend | todo | 2.S2 |
@@ -79,6 +80,11 @@ oldukları için sırayla ilerler.
 
 ### Bekleyen koordinasyon (şef takip ediyor)
 - ✅ ÇÖZÜLDÜ (1.Q1): `MAIL_FROM` + `TEAM_NOTIFY_EMAIL` .env.example'a eklendi.
+- **Auth export'ları (2.S2 + Frontend'e — 2.S1'den):** `@/lib/auth`'dan
+  `{ handlers, auth, signIn, signOut }` + `SIGN_IN_PATH = "/giris"` + `authConfig`.
+  `session.user = { id, role, subteam?, name, email, image }` (tip augmentation
+  src/lib/auth/types.ts). RBAC/proxy koruma `auth` ile; Frontend login `/giris`'te
+  `signIn` ile; oturum okuma `auth()`.
 - **Auth export'ları (QA 2.S1'e — Backend 2.B1'den):** `verifyPassword(plain, hash):
   Promise<boolean>` ve `hashPassword` → `@/lib/utils/password`. User modeli `@/models/User`
   (DİKKAT: `passwordHash` alanı `select:false` → authorize sorgusu `.select("+passwordHash")`
@@ -173,3 +179,6 @@ oldukları için sırayla ilerler.
 - 2026-07-04 — Şef: 2.B1 done (User/Subteam modelleri, bcryptjs, password helper'ları,
   seed:admin). Yeni env: SEED_ADMIN_EMAIL/PASSWORD. verifyPassword @/lib/utils/password.
   Liderlik QA'ya geçti; 2.S1 açıldı (Auth.js kurulumu). Push edildi.
+- 2026-07-04 — Şef: 2.S1 done (next-auth v5, Credentials authorize, JWT+rol,
+  tip augmentation, /giris signIn yolu). 2.S2 açıldı (RBAC + panel koruma + testler);
+  Frontend login sayfası için 2.F0 (/giris) plana eklendi. Push edildi.
