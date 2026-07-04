@@ -35,8 +35,8 @@ oldukları için sırayla ilerler.
 | 1.2 | Ana Sayfa (hero + istatistikler + sponsor şeridi + CTA) | Frontend | done | 1.1, 1.B3 |
 | 1.3 | Hakkımızda/Takım + Alt Ekipler sayfaları | Frontend | done | 1.1 |
 | 1.4 | Araç/Teknoloji + Başarılar (2022→2026 zaman çizelgesi) sayfaları | Frontend | done | 1.1 |
-| 1.5 | Sponsorluk sayfası (kademeler + indirilebilir PDF + form) | Frontend | in-progress | 1.1, 1.B1 |
-| 1.6 | Haberler/Medya + İletişim sayfaları (form → 1.B2) | Frontend | todo | 1.1, 1.B2, 1.B4 |
+| 1.5 | Sponsorluk sayfası (kademeler + indirilebilir PDF + form → 1.B2 contact) | Frontend | done | 1.1, 1.B2 |
+| 1.6 | Haberler/Medya + İletişim sayfaları (form → 1.B2) | Frontend | in-progress | 1.1, 1.B2, 1.B4 |
 | 1.7 | Bize Katıl (başvuru formu → 1.B1) sayfası | Frontend | todo | 1.1, 1.B1 |
 | 1.Q1 | Form güvenliği: zod validasyon şemaları (application/contact) + rate limit + güvenli input | Güvenlik & QA | todo | 1.B1, 1.B2 |
 | 1.Q2 | Public smoke/E2E testleri (sayfalar yükleniyor + form submit akışı) | Güvenlik & QA | todo | 1.2–1.7 |
@@ -76,6 +76,11 @@ oldukları için sırayla ilerler.
 - Public shell: `(public)/layout.tsx` Header+Footer sarar. Nav linkleri:
   `src/components/public/nav-links.ts`. Marka renkleri: `--color-brand-50..900`
   (globals.css `@theme`). Ana sayfa placeholder: `(public)/page.tsx` (1.2 dolduracak).
+- Form primitifleri (1.5): `Field` + `Input` @/components/ui. Yeniden kullanılabilir
+  `ContactForm` (@/components/public) → POST /api/contact; prop `fixedSubject?`
+  (verilirse konu alanı gizlenir ve sabit gönderilir), `withSubject?` (düzenlenebilir
+  konu alanı). Client+sunucu doğrulama, yükleniyor/başarı/hata durumları içeriyor.
+  İletişim (1.6) bunu düzenlenebilir konuyla, Sponsorluk (1.5) fixedSubject ile kullanır.
 
 ### Değişiklik günlüğü
 - 2026-07-02 — Şef: TASKS.md oluşturuldu. Faz 0 + Faz 1 planlandı. 0.1 açıldı (todo).
@@ -108,3 +113,7 @@ oldukları için sırayla ilerler.
 - 2026-07-03 — Şef: 1.4 done (/arac + /basarilar statik, Timeline bileşeni prop'tan
   besleniyor, build temiz). **Statik public sayfalar bitti.** Form sayfaları başlıyor;
   1.5 açıldı (Frontend — Sponsorluk + form → 1.B1 API). Push edildi.
+- 2026-07-03 — Şef: 1.5 done (Sponsorluk: kademeler + PDF + ContactForm; şef kararı
+  sponsorluk formu 1.B2 /api/contact'a bağlandı [1.B1 değil], fixedSubject ile).
+  Yeni: Field/Input primitifleri + yeniden kullanılabilir ContactForm. 1.6 açıldı
+  (Frontend — Haberler + İletişim). Push edildi.
