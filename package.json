@@ -13,7 +13,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "seed:sponsors": "tsx src/lib/utils/seedSponsors.ts",
-    "seed:announcements": "tsx src/lib/utils/seedAnnouncements.ts"
+    "seed:announcements": "tsx src/lib/utils/seedAnnouncements.ts",
+    "seed:admin": "tsx src/lib/utils/seedAdmin.ts"
   },
   "dependencies": {
     "@types/bcryptjs": "^2.4.6",
