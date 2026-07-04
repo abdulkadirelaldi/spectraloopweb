@@ -4,7 +4,7 @@
 > Durum değerleri: `todo` · `in-progress` · `blocked` · `review` · `done`
 > Kural: aynı anda tek worker meşgul. Bir görev `done` olup commit'lenince şef sıradakini açar.
 
-## Aktif Faz: Faz 1 — Public Site  (Faz 0 ✅ tamamlandı)
+## Aktif Faz: — (Faz 0 ✅ · Faz 1 ✅ tamamlandı — sıradaki: deploy? / Faz 2 Auth+Panel)
 
 ### Faz 0 — Kurulum (TAMAMLANDI ✅)
 
@@ -19,7 +19,7 @@ oldukları için sırayla ilerler.
 | 0.3 | Güvenlik temeli: `next.config.ts` security header'ları + `.env.example` (placeholder'lar) + test altyapısı (Vitest + Playwright config) + 1 smoke test | Güvenlik & QA | done | 0.1 |
 | 0.4 | Ortak tipler iskeleti `src/types` (PROGRAM.md §8 veri modelleri) — şef koordineli, Backend uygular | Backend | done | 0.2 |
 
-## Faz 1 — Public Site (AKTİF)
+## Faz 1 — Public Site (TAMAMLANDI ✅)
 
 > Frontend ağırlıklı. Backend public API sözleşmelerini önce tanımlar ki Frontend tüketsin.
 > Güvenlik & QA form koruma + header + smoke/E2E ile kapatır. Tek-worker sırası için
@@ -40,7 +40,7 @@ oldukları için sırayla ilerler.
 | 1.7 | Bize Katıl (başvuru formu → 1.B1) sayfası | Frontend | done | 1.1, 1.B1 |
 | 1.Q1 | Form güvenliği: zod şemaları (`src/lib/validation`: application/contact) + rate limit (proxy.ts) + `.env.example`'a MAIL_FROM/TEAM_NOTIFY_EMAIL + şema unit testleri | Güvenlik & QA | done | 1.B1, 1.B2 |
 | 1.B5 | zod şemalarını route'lara bağla: `/api/applications` + `/api/contact` içindeki el-yazımı `validate()` yerine `@/lib/validation` şemaları (TODO(1.Q1) kancaları) | Backend | done | 1.Q1 |
-| 1.Q2 | Public smoke/E2E testleri (sayfalar yükleniyor + form submit akışı) | Güvenlik & QA | in-progress | 1.2–1.7, 1.B5 |
+| 1.Q2 | Public smoke/E2E testleri (sayfalar yükleniyor + form submit akışı) | Güvenlik & QA | done | 1.2–1.7, 1.B5 |
 
 ---
 ### Scaffold gerçekleri (0.1 çıktısı — tüm agent'lar okusun)
@@ -133,3 +133,6 @@ oldukları için sırayla ilerler.
   şemaları route'lara bağla). Push edildi.
 - 2026-07-03 — Şef: 1.B5 done (her iki route zod şemalarını kullanıyor, validate()
   temizlendi, build+test temiz). Son Faz 1 görevi 1.Q2 açıldı (public smoke/E2E). Push edildi.
+- 2026-07-03 — Şef: 1.Q2 done (19 E2E testi yeşil: public smoke + navigasyon +
+  form akışları mock'lu). **🎉 FAZ 1 (PUBLIC SİTE) TAMAMEN TAMAMLANDI.**
+  Karar bekliyor: (A) Vercel deploy mi, (B) Faz 2 (Auth+Panel) mi. Push edildi.
