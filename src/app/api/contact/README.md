@@ -47,11 +47,13 @@ Send a contact message.
 { "ok": false, "error": "Invalid email address." }
 ```
 
-Possible 400 messages: `Invalid JSON body.`,
-`Request body must be a JSON object.`,
-`Fields name, email and message are required.`,
-`Field subject must be a string.`, `Invalid email address.`,
-`One or more fields exceed the maximum length.`
+Possible 400 messages (from the zod schema, first issue only): `Invalid JSON body.`,
+`Name is required.`, `Name is too long.`, `Invalid email address.`,
+`Email is too long.`, `Subject is too long.`, `Message is required.`,
+`Message is too long.`
+
+> A field that is **entirely absent** (not just empty) yields zod's default type
+> message, e.g. `Invalid input: expected string, received undefined`.
 
 ### Response shape (summary for Frontend)
 
@@ -70,9 +72,9 @@ Possible 400 messages: `Invalid JSON body.`,
   or Resend fails, the request still returns 201 — the contract is "message
   accepted", not "delivery guaranteed". Since nothing is persisted, a
   soft-skipped mail is a no-op on the server side (visible only in server logs).
-- **Validation is interim.** Minimal server-side checks (required fields, email
-  format, length caps). The authoritative zod schema arrives with task **1.Q1**
-  (Security & QA) and will replace the hand-rolled `validate()`.
+- **Validation is authoritative (zod).** The body is validated by `contactSchema`
+  from `@/lib/validation` (owned by Security & QA, task 1.Q1). Strings are
+  trimmed, `subject` is optional, and unknown keys are stripped.
 
 ### Environment
 

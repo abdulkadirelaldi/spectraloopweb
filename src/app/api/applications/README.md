@@ -50,10 +50,13 @@ Create a new application.
 { "ok": false, "error": "Invalid email address." }
 ```
 
-Possible 400 messages: `Invalid JSON body.`,
-`Request body must be a JSON object.`,
-`Fields name, email, subteamPref and message are required.`,
-`Invalid email address.`, `One or more fields exceed the maximum length.`
+Possible 400 messages (from the zod schema, first issue only): `Invalid JSON body.`,
+`Name is required.`, `Name is too long.`, `Invalid email address.`,
+`Email is too long.`, `Preferred subteam is required.`,
+`Preferred subteam is too long.`, `Message is required.`, `Message is too long.`
+
+> A field that is **entirely absent** (not just empty) yields zod's default type
+> message, e.g. `Invalid input: expected string, received undefined`.
 
 **500 Internal Server Error** — database write failed:
 
@@ -72,15 +75,16 @@ Possible 400 messages: `Invalid JSON body.`,
 
 - **Email is best-effort.** If `RESEND_API_KEY` / `TEAM_NOTIFY_EMAIL` are unset
   or Resend fails, the application is still saved and the response is still 201.
-- **Validation is interim.** Server-side checks here are minimal (required
-  fields, email format, length caps). The authoritative zod schema arrives with
-  task **1.Q1** (Security & QA) and will replace the hand-rolled `validate()`.
+- **Validation is authoritative (zod).** The body is validated by
+  `applicationSchema` from `@/lib/validation` (owned by Security & QA, task
+  1.Q1). Strings are trimmed and unknown keys are stripped, so a client cannot
+  smuggle server-assigned fields (`status`, `id`, `createdAt`) through the body.
 
 ### Environment
 
-| Key                | Used for                            | Required?                       |
-| ------------------ | ----------------------------------- | ------------------------------- |
-| `MONGODB_URI`      | DB connection                       | yes (500 if unset)              |
-| `RESEND_API_KEY`   | sending the notification email      | no (mail skipped if unset)      |
-| `TEAM_NOTIFY_EMAIL`| recipient of the team notification  | no (mail skipped if unset)      |
-| `MAIL_FROM`        | sender address                      | no (falls back to Resend onboarding sender) |
+| Key                 | Used for                           | Required?                                   |
+| ------------------- | ---------------------------------- | ------------------------------------------- |
+| `MONGODB_URI`       | DB connection                      | yes (500 if unset)                          |
+| `RESEND_API_KEY`    | sending the notification email     | no (mail skipped if unset)                  |
+| `TEAM_NOTIFY_EMAIL` | recipient of the team notification | no (mail skipped if unset)                  |
+| `MAIL_FROM`         | sender address                     | no (falls back to Resend onboarding sender) |
