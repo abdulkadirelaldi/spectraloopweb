@@ -36,8 +36,8 @@ oldukları için sırayla ilerler.
 | 1.3 | Hakkımızda/Takım + Alt Ekipler sayfaları | Frontend | done | 1.1 |
 | 1.4 | Araç/Teknoloji + Başarılar (2022→2026 zaman çizelgesi) sayfaları | Frontend | done | 1.1 |
 | 1.5 | Sponsorluk sayfası (kademeler + indirilebilir PDF + form → 1.B2 contact) | Frontend | done | 1.1, 1.B2 |
-| 1.6 | Haberler/Medya + İletişim sayfaları (form → 1.B2) | Frontend | in-progress | 1.1, 1.B2, 1.B4 |
-| 1.7 | Bize Katıl (başvuru formu → 1.B1) sayfası | Frontend | todo | 1.1, 1.B1 |
+| 1.6 | Haberler/Medya + İletişim sayfaları (form → 1.B2) | Frontend | done | 1.1, 1.B2, 1.B4 |
+| 1.7 | Bize Katıl (başvuru formu → 1.B1) sayfası | Frontend | in-progress | 1.1, 1.B1 |
 | 1.Q1 | Form güvenliği: zod validasyon şemaları (application/contact) + rate limit + güvenli input | Güvenlik & QA | todo | 1.B1, 1.B2 |
 | 1.Q2 | Public smoke/E2E testleri (sayfalar yükleniyor + form submit akışı) | Güvenlik & QA | todo | 1.2–1.7 |
 
@@ -117,3 +117,6 @@ oldukları için sırayla ilerler.
   sponsorluk formu 1.B2 /api/contact'a bağlandı [1.B1 değil], fixedSubject ile).
   Yeni: Field/Input primitifleri + yeniden kullanılabilir ContactForm. 1.6 açıldı
   (Frontend — Haberler + İletişim). Push edildi.
+- 2026-07-03 — Şef: 1.6 done (/haberler NewsList+AnnouncementCard /api/announcements
+  tüketiyor, /iletisim ContactForm withSubject, build temiz). 1.7 açıldı (Frontend —
+  Bize Katıl → 1.B1 applications API). Push edildi.
