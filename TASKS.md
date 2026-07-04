@@ -51,8 +51,8 @@ oldukları için sırayla ilerler.
 
 | id | görev | agent | durum | bağımlılık |
 |----|-------|-------|-------|------------|
-| 2.B1 | User + Subteam Mongoose modelleri (passwordHash, role, active, subteam) + admin seed script (bcrypt hash) | Backend | in-progress | 0.4 |
-| 2.S1 | Auth.js kurulumu: Credentials provider + authorize (User+bcrypt) + JWT/session'da rol + AUTH_SECRET + api/auth/[...nextauth] | Güvenlik & QA | todo | 2.B1 |
+| 2.B1 | User + Subteam Mongoose modelleri (passwordHash, role, active, subteam) + admin seed script (bcrypt hash) | Backend | done | 0.4 |
+| 2.S1 | Auth.js kurulumu: Credentials provider + authorize (User+bcrypt) + JWT/session'da rol + AUTH_SECRET + api/auth/[...nextauth] | Güvenlik & QA | in-progress | 2.B1 |
 | 2.S2 | RBAC helper'ları (rol kontrol) + panel route koruma (proxy.ts /panel/**) + auth & RBAC testleri (giriş, yetkisiz erişim reddi) | Güvenlik & QA | todo | 2.S1 |
 | 2.F1 | Panel shell: `(panel)/panel` layout + nav + dashboard + oturum durumu/çıkış | Frontend | todo | 2.S2 |
 | 2.B2 | Panel API: announcements write (CRUD) + RBAC (lead+ yayınlar) | Backend | todo | 2.S2 |
@@ -79,6 +79,11 @@ oldukları için sırayla ilerler.
 
 ### Bekleyen koordinasyon (şef takip ediyor)
 - ✅ ÇÖZÜLDÜ (1.Q1): `MAIL_FROM` + `TEAM_NOTIFY_EMAIL` .env.example'a eklendi.
+- **Auth export'ları (QA 2.S1'e — Backend 2.B1'den):** `verifyPassword(plain, hash):
+  Promise<boolean>` ve `hashPassword` → `@/lib/utils/password`. User modeli `@/models/User`
+  (DİKKAT: `passwordHash` alanı `select:false` → authorize sorgusu `.select("+passwordHash")`
+  ile açıkça istemeli). Yeni env: `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` → .env.example'a
+  eklenecek (QA). `AUTH_SECRET` + `NEXTAUTH_URL` zaten .env.example'da.
 - **Validasyon şema export'ları (Backend 1.B5'e):** `@/lib/validation`'dan
   `applicationSchema`, `contactSchema` (zod) + `firstErrorMessage` helper +
   `ApplicationInput`/`ContactInput` (z.infer). Route'lardaki el-yazımı `validate()`
@@ -165,3 +170,6 @@ oldukları için sırayla ilerler.
 - 2026-07-03 — Kullanıcı kararı: **Faz 2 (Auth + Panel)**. Deploy ertelendi.
   Şef: Faz 2 planı eklendi (13 görev). 2.B1 açıldı (Backend — User/Subteam modelleri +
   admin seed), ardından liderlik QA'ya (auth) geçecek. Push edildi.
+- 2026-07-04 — Şef: 2.B1 done (User/Subteam modelleri, bcryptjs, password helper'ları,
+  seed:admin). Yeni env: SEED_ADMIN_EMAIL/PASSWORD. verifyPassword @/lib/utils/password.
+  Liderlik QA'ya geçti; 2.S1 açıldı (Auth.js kurulumu). Push edildi.
