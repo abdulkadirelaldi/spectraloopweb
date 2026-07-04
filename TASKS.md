@@ -38,8 +38,8 @@ oldukları için sırayla ilerler.
 | 1.5 | Sponsorluk sayfası (kademeler + indirilebilir PDF + form → 1.B2 contact) | Frontend | done | 1.1, 1.B2 |
 | 1.6 | Haberler/Medya + İletişim sayfaları (form → 1.B2) | Frontend | done | 1.1, 1.B2, 1.B4 |
 | 1.7 | Bize Katıl (başvuru formu → 1.B1) sayfası | Frontend | done | 1.1, 1.B1 |
-| 1.Q1 | Form güvenliği: zod şemaları (`src/lib/validation`: application/contact) + rate limit (middleware) + `.env.example`'a MAIL_FROM/TEAM_NOTIFY_EMAIL + şema unit testleri | Güvenlik & QA | in-progress | 1.B1, 1.B2 |
-| 1.B5 | zod şemalarını route'lara bağla: `/api/applications` + `/api/contact` içindeki el-yazımı `validate()` yerine `@/lib/validation` şemaları (TODO(1.Q1) kancaları) | Backend | todo | 1.Q1 |
+| 1.Q1 | Form güvenliği: zod şemaları (`src/lib/validation`: application/contact) + rate limit (proxy.ts) + `.env.example`'a MAIL_FROM/TEAM_NOTIFY_EMAIL + şema unit testleri | Güvenlik & QA | done | 1.B1, 1.B2 |
+| 1.B5 | zod şemalarını route'lara bağla: `/api/applications` + `/api/contact` içindeki el-yazımı `validate()` yerine `@/lib/validation` şemaları (TODO(1.Q1) kancaları) | Backend | in-progress | 1.Q1 |
 | 1.Q2 | Public smoke/E2E testleri (sayfalar yükleniyor + form submit akışı) | Güvenlik & QA | todo | 1.2–1.7, 1.B5 |
 
 ---
@@ -52,8 +52,11 @@ oldukları için sırayla ilerler.
 - ESLint flat config: `eslint.config.mjs`. Prettier: `.prettierrc` + `.prettierignore`.
 
 ### Bekleyen koordinasyon (şef takip ediyor)
-- **.env.example'a eklenecek** (Güvenlik & QA — 1.Q1 ile): `MAIL_FROM`,
-  `TEAM_NOTIFY_EMAIL` (Backend 1.B1'de Resend için kullanıldı, ikisi de opsiyonel).
+- ✅ ÇÖZÜLDÜ (1.Q1): `MAIL_FROM` + `TEAM_NOTIFY_EMAIL` .env.example'a eklendi.
+- **Validasyon şema export'ları (Backend 1.B5'e):** `@/lib/validation`'dan
+  `applicationSchema`, `contactSchema` (zod) + `firstErrorMessage` helper +
+  `ApplicationInput`/`ContactInput` (z.infer). Route'lardaki el-yazımı `validate()`
+  bunlarla değişecek. Next 16 notu: middleware yerine `src/proxy.ts` kullanılıyor.
 - **API sözleşmesi (Frontend'e — 1.5/1.7):** POST `/api/applications`,
   body `{name,email,subteamPref,message}` (hepsi zorunlu), başarı `201 {ok:true,id}`,
   hata `400/500 {ok:false,error}`. Mail best-effort. Detay: api/applications/README.md.
@@ -125,3 +128,6 @@ oldukları için sırayla ilerler.
   listesi merkezi src/components/public/subteams.ts, yeni Select primitifi, build temiz).
   **TÜM PUBLIC SAYFALAR TAMAM.** QA fazına geçildi: 1.Q1 açıldı (zod + rate limit + env);
   sahiplik çakışması için 1.B5 (Backend — şemaları route'a bağlama) eklendi. Push edildi.
+- 2026-07-03 — Şef: 1.Q1 done (zod şemaları + rate limit src/proxy.ts [Next 16:
+  middleware yerine proxy], env eklendi, 30 test yeşil). 1.B5 açıldı (Backend —
+  şemaları route'lara bağla). Push edildi.
