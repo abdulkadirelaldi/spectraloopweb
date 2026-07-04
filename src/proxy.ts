@@ -1,23 +1,29 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+import { SESSION_COOKIE_NAMES, SIGN_IN_PATH } from "@/lib/auth/constants";
 import { createRateLimiter } from "@/lib/rate-limit";
 
 /**
- * Proxy (Next.js 16 renamed `middleware` → `proxy`; defaults to the Node.js
- * runtime). Applies IP-based rate limiting to the public POST endpoints —
- * `/api/applications` and `/api/contact` — WITHOUT touching the route handlers
- * (owned by Backend). On limit exceed it short-circuits with 429 in the same
- * `{ ok: false, error }` JSON shape the routes use.
+ * Proxy (Next.js 16 renamed `middleware` → `proxy`; Node.js runtime). Next
+ * allows only one proxy file, so two concerns live here:
  *
- * Only POST is throttled here; GETs on these paths (none today) pass through.
+ *  1. Optimistic /panel gate — redirect requests without a session cookie to
+ *     the sign-in page. This is a fast, cookie-only presence check (no decode,
+ *     no DB). Per the Next.js auth guide + PROGRAM §11 this is NOT the security
+ *     boundary: it only pre-filters obvious anonymous traffic and avoids a
+ *     flash of the panel. Every panel API route MUST still enforce auth/role via
+ *     `requireApiRole` (guard.ts), and panel pages re-check with `auth()`.
+ *  2. IP rate limiting for the public POST endpoints — unchanged from 1.Q1.
+ *
+ * Kept dependency-light on purpose: importing the full `@/lib/auth` (NextAuth +
+ * Mongoose) here is both unnecessary for a presence check and problematic in the
+ * proxy runtime, so we read the cookie directly.
  */
 
-// A few requests per minute per IP — enough for a legit form submit + retries,
-// low enough to blunt scripted spam. Node.js runtime keeps this Map alive across
-// requests within one instance (see rate-limit.ts for the serverless caveat).
 const WINDOW_MS = 60_000;
 const MAX_REQUESTS_PER_WINDOW = 5;
+const RATE_LIMITED_PATHS = new Set(["/api/applications", "/api/contact"]);
 
 const rateLimit = createRateLimiter({
   limit: MAX_REQUESTS_PER_WINDOW,
@@ -31,36 +37,56 @@ function clientIp(request: NextRequest): string {
   return request.headers.get("x-real-ip")?.trim() || "unknown";
 }
 
+/** Optimistic: does the request carry an Auth.js session cookie at all? */
+function hasSessionCookie(request: NextRequest): boolean {
+  return SESSION_COOKIE_NAMES.some((name) =>
+    Boolean(request.cookies.get(name)),
+  );
+}
+
 export function proxy(request: NextRequest): NextResponse {
-  // Only throttle state-changing submissions.
-  if (request.method !== "POST") return NextResponse.next();
+  const { pathname } = request.nextUrl;
 
-  // Key by IP + path so the two endpoints get independent budgets.
-  const key = `${clientIp(request)}:${request.nextUrl.pathname}`;
-  const result = rateLimit(key);
+  // 1) Optimistic panel gate. Real authz is enforced in the API routes/pages.
+  if (pathname === "/panel" || pathname.startsWith("/panel/")) {
+    if (!hasSessionCookie(request)) {
+      const signInUrl = new URL(SIGN_IN_PATH, request.nextUrl.origin);
+      // Preserve the intended destination so the login page can bounce back.
+      signInUrl.searchParams.set("callbackUrl", pathname);
+      return NextResponse.redirect(signInUrl);
+    }
+    return NextResponse.next();
+  }
 
-  if (!result.allowed) {
-    const retryAfterSeconds = Math.max(
-      1,
-      Math.ceil((result.resetAt - Date.now()) / 1000),
-    );
-    return NextResponse.json(
-      { ok: false, error: "Too many requests. Please try again shortly." },
-      {
-        status: 429,
-        headers: {
-          "Retry-After": String(retryAfterSeconds),
-          "RateLimit-Limit": String(result.limit),
-          "RateLimit-Remaining": String(result.remaining),
+  // 2) Rate limit public POST submissions (behaviour identical to 1.Q1).
+  if (request.method === "POST" && RATE_LIMITED_PATHS.has(pathname)) {
+    const key = `${clientIp(request)}:${pathname}`;
+    const result = rateLimit(key);
+
+    if (!result.allowed) {
+      const retryAfterSeconds = Math.max(
+        1,
+        Math.ceil((result.resetAt - Date.now()) / 1000),
+      );
+      return NextResponse.json(
+        { ok: false, error: "Too many requests. Please try again shortly." },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(retryAfterSeconds),
+            "RateLimit-Limit": String(result.limit),
+            "RateLimit-Remaining": String(result.remaining),
+          },
         },
-      },
-    );
+      );
+    }
   }
 
   return NextResponse.next();
 }
 
-// Run only on the two public POST endpoints (matcher must be a static constant).
+// Run on the panel routes + the two rate-limited public endpoints.
+// (matcher must be a static constant so Next can analyze it at build time.)
 export const config = {
-  matcher: ["/api/applications", "/api/contact"],
+  matcher: ["/panel", "/panel/:path*", "/api/applications", "/api/contact"],
 };

@@ -2,15 +2,12 @@ import NextAuth, { type NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 import { authorizeCredentials } from "./authorize";
+import { SIGN_IN_PATH } from "./constants";
 // Side-effect import: applies the Session/JWT/User module augmentation.
 import "./types";
 
-/**
- * Path of the (Frontend-owned) sign-in page. Auth.js redirects unauthenticated
- * users and credential errors here. Exported so route protection (2.S2) and the
- * login page reuse the same constant.
- */
-export const SIGN_IN_PATH = "/giris";
+// Re-export so `@/lib/auth` stays the one import site for consumers.
+export { SIGN_IN_PATH } from "./constants";
 
 export const authConfig: NextAuthConfig = {
   // JWT sessions are required for the Credentials provider (no DB session row).
@@ -71,3 +68,7 @@ export const authConfig: NextAuthConfig = {
  * are the server actions the login page / panel use.
  */
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
+
+// RBAC predicates + API authorization guards (consumed by Backend panel APIs).
+export * from "./rbac";
+export * from "./guard";
