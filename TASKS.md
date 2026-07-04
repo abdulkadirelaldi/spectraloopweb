@@ -56,14 +56,16 @@ oldukları için sırayla ilerler.
 | 2.S2 | RBAC helper'ları (rol kontrol) + panel route koruma (proxy.ts /panel/**) + auth & RBAC testleri (giriş, yetkisiz erişim reddi) | Güvenlik & QA | done | 2.S1 |
 | 2.F0 | Giriş sayfası UI (`/giris`) — Auth.js signIn ile Credentials formu | Frontend | todo | 2.S1 |
 | 2.F1 | Panel shell: `(panel)/panel` layout + nav + dashboard + oturum durumu/çıkış | Frontend | todo | 2.S2 |
-| 2.B2 | Panel API: announcements write (CRUD) + RBAC (lead+ yayınlar) | Backend | in-progress | 2.S2 |
-| 2.B3 | Panel API: tasks CRUD (birim bazlı) + RBAC | Backend | todo | 2.S2 |
+| 2.B2 | Panel API: announcements write (CRUD) + RBAC (lead+ yayınlar) — `/api/panel/*` deseni | Backend | done | 2.S2 |
+| 2.B3 | Panel API: tasks CRUD (birim bazlı) + RBAC | Backend | in-progress | 2.S2 |
 | 2.B4 | Panel API: members (üye dizini oku + admin CRUD) + RBAC | Backend | todo | 2.S2 |
 | 2.B5 | Panel API: documents (metadata; R2 upload ayrı değerlendirilecek) + events + RBAC | Backend | todo | 2.S2 |
 | 2.F2 | Panel: Duyurular (liste + oluştur/yayınla) | Frontend | todo | 2.F1, 2.B2 |
 | 2.F3 | Panel: Görevler (birim bazlı Kanban/liste) | Frontend | todo | 2.F1, 2.B3 |
 | 2.F4 | Panel: Üye dizini | Frontend | todo | 2.F1, 2.B4 |
 | 2.F5 | Panel: Dokümanlar + Etkinlik/Takvim | Frontend | todo | 2.F1, 2.B5 |
+| 2.Q0 | Panel input zod şemaları (`@/lib/validation`): announcement/task/member/document/event — Backend'in TODO(2.Q) kancaları için | Güvenlik & QA | todo | 2.B2–2.B5 |
+| 2.B6 | Panel zod şemalarını route'lara bağla (TODO(2.Q) → @/lib/validation) | Backend | todo | 2.Q0 |
 | 2.Q1 | Panel RBAC E2E: rol bazlı erişim, yetkisiz reddi (admin/lead/member) | Güvenlik & QA | todo | 2.F2–2.F5 |
 
 > Not: Faz 2 planı canlı — görevler ilerledikçe (özellikle panel API/UI) bölünüp
@@ -79,6 +81,9 @@ oldukları için sırayla ilerler.
 - ESLint flat config: `eslint.config.mjs`. Prettier: `.prettierrc` + `.prettierignore`.
 
 ### Bekleyen koordinasyon (şef takip ediyor)
+- **Panel zod şemaları:** Backend panel API'leri (2.B2+) ara-doğrulama + `TODO(2.Q)`
+  ile ilerliyor. Panel API'leri bitince QA tek görevde (2.Q0) tüm panel input
+  şemalarını `@/lib/validation`'a yazacak, Backend 2.B6'da bağlayacak.
 - ✅ ÇÖZÜLDÜ (1.Q1): `MAIL_FROM` + `TEAM_NOTIFY_EMAIL` .env.example'a eklendi.
 - **API guard (Backend 2.B2–2.B5'e — 2.S2'den):** `@/lib/auth/guard`'dan
   `requireApiSession()`, `requireApiRole(allowed: Role|Role[])`, `requireApiMinRole(min: Role)`.
@@ -191,3 +196,6 @@ oldukları için sırayla ilerler.
 - 2026-07-04 — Şef: 2.S2 done (RBAC + guard.ts [requireApiRole/MinRole/Session] +
   proxy /panel koruma + 69 unit test + panel-protection E2E). **Auth+RBAC temeli bitti.**
   Backend-önce sırayla 2.B2 açıldı (panel announcements API). Push edildi.
+- 2026-07-04 — Şef: 2.B2 done (panel announcements CRUD, /api/panel/* deseni, guard'lar,
+  public GET bozulmadı). Panel zod'ları batch'lendi: 2.Q0 (QA yazar) + 2.B6 (Backend bağlar)
+  plana eklendi. 2.B3 açıldı (panel tasks CRUD). Push edildi.
