@@ -7,7 +7,7 @@ export type ContactFormProps = {
   /** When set, this subject is sent as-is and the subject field is hidden. */
   fixedSubject?: string;
   /** Show an editable subject field (ignored when `fixedSubject` is set). */
-  showSubject?: boolean;
+  withSubject?: boolean;
   submitLabel?: string;
   messageLabel?: string;
   messagePlaceholder?: string;
@@ -57,14 +57,14 @@ function validate(
  */
 export function ContactForm({
   fixedSubject,
-  showSubject = false,
+  withSubject = false,
   submitLabel = "Gönder",
   messageLabel = "Mesaj",
   messagePlaceholder = "Mesajınızı yazın…",
   successTitle = "Teşekkürler!",
   successMessage = "Mesajınız alındı. En kısa sürede size dönüş yapacağız.",
 }: ContactFormProps) {
-  const subjectEditable = showSubject && !fixedSubject;
+  const subjectEditable = withSubject && !fixedSubject;
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
