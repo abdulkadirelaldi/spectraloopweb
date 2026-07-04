@@ -1,7 +1,8 @@
 import type { InputHTMLAttributes, TextareaHTMLAttributes } from "react";
 import { cn } from "./cn";
 
-const controlBase =
+/** Shared control styling for text inputs, textareas, and selects. */
+export const controlBase =
   "block w-full rounded-lg border border-border bg-surface px-3.5 py-2.5 " +
   "text-sm text-foreground placeholder:text-muted transition-colors " +
   "focus-visible:outline-none focus-visible:border-brand focus-visible:ring-2 " +
