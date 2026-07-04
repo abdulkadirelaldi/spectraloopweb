@@ -53,10 +53,10 @@ oldukları için sırayla ilerler.
 |----|-------|-------|-------|------------|
 | 2.B1 | User + Subteam Mongoose modelleri (passwordHash, role, active, subteam) + admin seed script (bcrypt hash) | Backend | done | 0.4 |
 | 2.S1 | Auth.js kurulumu: Credentials provider + authorize (User+bcrypt) + JWT/session'da rol + AUTH_SECRET + api/auth/[...nextauth] | Güvenlik & QA | done | 2.B1 |
-| 2.S2 | RBAC helper'ları (rol kontrol) + panel route koruma (proxy.ts /panel/**) + auth & RBAC testleri (giriş, yetkisiz erişim reddi) | Güvenlik & QA | in-progress | 2.S1 |
+| 2.S2 | RBAC helper'ları (rol kontrol) + panel route koruma (proxy.ts /panel/**) + auth & RBAC testleri (giriş, yetkisiz erişim reddi) | Güvenlik & QA | done | 2.S1 |
 | 2.F0 | Giriş sayfası UI (`/giris`) — Auth.js signIn ile Credentials formu | Frontend | todo | 2.S1 |
 | 2.F1 | Panel shell: `(panel)/panel` layout + nav + dashboard + oturum durumu/çıkış | Frontend | todo | 2.S2 |
-| 2.B2 | Panel API: announcements write (CRUD) + RBAC (lead+ yayınlar) | Backend | todo | 2.S2 |
+| 2.B2 | Panel API: announcements write (CRUD) + RBAC (lead+ yayınlar) | Backend | in-progress | 2.S2 |
 | 2.B3 | Panel API: tasks CRUD (birim bazlı) + RBAC | Backend | todo | 2.S2 |
 | 2.B4 | Panel API: members (üye dizini oku + admin CRUD) + RBAC | Backend | todo | 2.S2 |
 | 2.B5 | Panel API: documents (metadata; R2 upload ayrı değerlendirilecek) + events + RBAC | Backend | todo | 2.S2 |
@@ -80,6 +80,12 @@ oldukları için sırayla ilerler.
 
 ### Bekleyen koordinasyon (şef takip ediyor)
 - ✅ ÇÖZÜLDÜ (1.Q1): `MAIL_FROM` + `TEAM_NOTIFY_EMAIL` .env.example'a eklendi.
+- **API guard (Backend 2.B2–2.B5'e — 2.S2'den):** `@/lib/auth/guard`'dan
+  `requireApiSession()`, `requireApiRole(allowed: Role|Role[])`, `requireApiMinRole(min: Role)`.
+  Dönüş `{ok:true, session} | {ok:false, response: NextResponse}` (401 oturumsuz,
+  403 yetersiz rol). Kullanım: `const gate = await requireApiRole([...]); if(!gate.ok) return gate.response;`
+  sonra `gate.session.user.{id,role,subteam}`. Panel route koruması: proxy.ts /panel
+  optimistic redirect + API'de zorunlu guard (katmanlı — PROGRAM §11).
 - **Auth export'ları (2.S2 + Frontend'e — 2.S1'den):** `@/lib/auth`'dan
   `{ handlers, auth, signIn, signOut }` + `SIGN_IN_PATH = "/giris"` + `authConfig`.
   `session.user = { id, role, subteam?, name, email, image }` (tip augmentation
@@ -182,3 +188,6 @@ oldukları için sırayla ilerler.
 - 2026-07-04 — Şef: 2.S1 done (next-auth v5, Credentials authorize, JWT+rol,
   tip augmentation, /giris signIn yolu). 2.S2 açıldı (RBAC + panel koruma + testler);
   Frontend login sayfası için 2.F0 (/giris) plana eklendi. Push edildi.
+- 2026-07-04 — Şef: 2.S2 done (RBAC + guard.ts [requireApiRole/MinRole/Session] +
+  proxy /panel koruma + 69 unit test + panel-protection E2E). **Auth+RBAC temeli bitti.**
+  Backend-önce sırayla 2.B2 açıldı (panel announcements API). Push edildi.
