@@ -13,4 +13,8 @@ export { Section } from "./Section";
 export type { SectionProps } from "./Section";
 export { Badge } from "./Badge";
 export type { BadgeProps, BadgeVariant } from "./Badge";
+export { Input, Textarea } from "./Input";
+export type { InputProps, TextareaProps } from "./Input";
+export { Field } from "./Field";
+export type { FieldProps } from "./Field";
 export { cn } from "./cn";
