@@ -16,6 +16,8 @@
     "seed:announcements": "tsx src/lib/utils/seedAnnouncements.ts"
   },
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^3.0.3",
     "mongoose": "^9.7.3",
     "next": "16.2.10",
     "react": "19.2.4",
