@@ -39,8 +39,8 @@ oldukları için sırayla ilerler.
 | 1.6 | Haberler/Medya + İletişim sayfaları (form → 1.B2) | Frontend | done | 1.1, 1.B2, 1.B4 |
 | 1.7 | Bize Katıl (başvuru formu → 1.B1) sayfası | Frontend | done | 1.1, 1.B1 |
 | 1.Q1 | Form güvenliği: zod şemaları (`src/lib/validation`: application/contact) + rate limit (proxy.ts) + `.env.example`'a MAIL_FROM/TEAM_NOTIFY_EMAIL + şema unit testleri | Güvenlik & QA | done | 1.B1, 1.B2 |
-| 1.B5 | zod şemalarını route'lara bağla: `/api/applications` + `/api/contact` içindeki el-yazımı `validate()` yerine `@/lib/validation` şemaları (TODO(1.Q1) kancaları) | Backend | in-progress | 1.Q1 |
-| 1.Q2 | Public smoke/E2E testleri (sayfalar yükleniyor + form submit akışı) | Güvenlik & QA | todo | 1.2–1.7, 1.B5 |
+| 1.B5 | zod şemalarını route'lara bağla: `/api/applications` + `/api/contact` içindeki el-yazımı `validate()` yerine `@/lib/validation` şemaları (TODO(1.Q1) kancaları) | Backend | done | 1.Q1 |
+| 1.Q2 | Public smoke/E2E testleri (sayfalar yükleniyor + form submit akışı) | Güvenlik & QA | in-progress | 1.2–1.7, 1.B5 |
 
 ---
 ### Scaffold gerçekleri (0.1 çıktısı — tüm agent'lar okusun)
@@ -131,3 +131,5 @@ oldukları için sırayla ilerler.
 - 2026-07-03 — Şef: 1.Q1 done (zod şemaları + rate limit src/proxy.ts [Next 16:
   middleware yerine proxy], env eklendi, 30 test yeşil). 1.B5 açıldı (Backend —
   şemaları route'lara bağla). Push edildi.
+- 2026-07-03 — Şef: 1.B5 done (her iki route zod şemalarını kullanıyor, validate()
+  temizlendi, build+test temiz). Son Faz 1 görevi 1.Q2 açıldı (public smoke/E2E). Push edildi.
