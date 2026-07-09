@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiSession } from "@/lib/auth/guard";
 import { DocumentModel, type DocumentDocument } from "@/models/Document";
-import { toDocument, validateUpdate } from "../shared";
+import { toDocument } from "../shared";
+import { panelDocumentUpdateSchema, firstErrorMessage } from "@/lib/validation";
 
 /**
  * Single panel document — /api/panel/documents/[id]
@@ -80,9 +81,12 @@ export async function PATCH(request: Request, ctx: Ctx): Promise<Response> {
     );
   }
 
-  const parsed = validateUpdate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelDocumentUpdateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
   const patch = parsed.data;
 

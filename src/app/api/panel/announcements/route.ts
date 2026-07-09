@@ -1,7 +1,11 @@
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole, requireApiSession } from "@/lib/auth/guard";
 import { Announcement, type AnnouncementDocument } from "@/models/Announcement";
-import { toAnnouncement, validateCreate } from "./shared";
+import { toAnnouncement } from "./shared";
+import {
+  panelAnnouncementCreateSchema,
+  firstErrorMessage,
+} from "@/lib/validation";
 
 /**
  * Panel announcements collection — /api/panel/announcements
@@ -50,9 +54,12 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
-  const parsed = validateCreate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelAnnouncementCreateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
 
   try {

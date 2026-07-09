@@ -2,7 +2,12 @@ import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole, requireApiSession } from "@/lib/auth/guard";
 import { User, type UserDocument } from "@/models/User";
 import { hashPassword } from "@/lib/utils/password";
-import { ROLES, toMember, validateCreate } from "./shared";
+import { toMember } from "./shared";
+import {
+  panelMemberCreateSchema,
+  firstErrorMessage,
+  ROLES,
+} from "@/lib/validation";
 
 /**
  * Panel members collection — /api/panel/members
@@ -90,9 +95,12 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
-  const parsed = validateCreate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelMemberCreateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
 
   // Hash the plaintext password (if any) — never persist/log the plaintext.

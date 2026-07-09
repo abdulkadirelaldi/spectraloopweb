@@ -4,12 +4,12 @@ import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole, requireApiSession } from "@/lib/auth/guard";
 import { User, type UserDocument } from "@/models/User";
 import { hashPassword } from "@/lib/utils/password";
+import { LEAD_EDITABLE_FIELDS, toMember } from "../shared";
 import {
-  LEAD_EDITABLE_FIELDS,
-  toMember,
-  validateUpdate,
-  type MemberUpdateInput,
-} from "../shared";
+  panelMemberUpdateSchema,
+  firstErrorMessage,
+  type PanelMemberUpdate,
+} from "@/lib/validation";
 
 /**
  * Single panel member — /api/panel/members/[id]
@@ -46,7 +46,7 @@ function forbidden(error = "Forbidden"): Response {
 }
 
 /** True if the patch would strip admin power (demote or deactivate) from a user. */
-function removesAdminPower(patch: MemberUpdateInput): boolean {
+function removesAdminPower(patch: PanelMemberUpdate): boolean {
   return (
     (patch.role !== undefined && patch.role !== "admin") ||
     patch.active === false
@@ -84,9 +84,12 @@ export async function PATCH(request: Request, ctx: Ctx): Promise<Response> {
     );
   }
 
-  const parsed = validateUpdate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelMemberUpdateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
   const patch = parsed.data;
 
@@ -104,7 +107,7 @@ export async function PATCH(request: Request, ctx: Ctx): Promise<Response> {
       }
       // Field allow-list: never role/active/email/subteam/password.
       const disallowed = Object.keys(patch).filter(
-        (k) => !LEAD_EDITABLE_FIELDS.includes(k as keyof MemberUpdateInput),
+        (k) => !LEAD_EDITABLE_FIELDS.includes(k as keyof PanelMemberUpdate),
       );
       if (disallowed.length > 0) {
         return forbidden(`A lead cannot change: ${disallowed.join(", ")}.`);

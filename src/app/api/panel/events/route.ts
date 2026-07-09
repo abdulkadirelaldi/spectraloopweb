@@ -1,7 +1,12 @@
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole, requireApiSession } from "@/lib/auth/guard";
 import { EventModel, type EventDocument } from "@/models/Event";
-import { EVENT_TYPES, toEvent, validateCreate } from "./shared";
+import { toEvent } from "./shared";
+import {
+  panelEventCreateSchema,
+  firstErrorMessage,
+  EVENT_TYPES,
+} from "@/lib/validation";
 
 /**
  * Panel events collection — /api/panel/events
@@ -61,9 +66,12 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
-  const parsed = validateCreate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelEventCreateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
 
   try {

@@ -120,9 +120,12 @@ sets `active: false`. Idempotent; last-admin guard applies.
 
 ## Open items
 
-- **Validation is interim (hand-rolled)** in `shared.ts`, marked `TODO(2.Q)`. A
-  panel-member zod schema is needed from Security & QA (`@/lib/validation`, task
-  2.Q0), bound like the public form schemas (cf. 1.B5).
+- **Validation is authoritative (zod).** The body is validated by
+  `panelMemberCreateSchema` / `panelMemberUpdateSchema` from `@/lib/validation`
+  (Security & QA, 2.Q0), bound in 2.B6. Validates SHAPE only — it accepts
+  `role`/`active`/`password` but does NOT authorize them: role assignment,
+  (de)activation, the last-admin guard, lead field allow-list, and password
+  hashing all stay in the route/guard. Unknown keys are stripped.
 - **Response summary (for Frontend 2.F4):** success → `{ ok:true, ... }` with
   `members` (list) or `member` (single); failure → `{ ok:false, error }`.
   `MemberView` = `{ id, name, email?, role, subteam?, photoUrl?, active, createdAt }`.

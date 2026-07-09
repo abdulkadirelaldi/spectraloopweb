@@ -93,8 +93,10 @@ cannot move a document to another subteam.
 - **File upload deferred to Faz 3** (`TODO(Faz3)` in `src/models/Document.ts` +
   `shared.ts`): presigned R2 URL issuance + MIME/size validation. For now only
   metadata (incl. an external `fileUrl`) is stored.
-- **Validation is interim (hand-rolled)** in `shared.ts`, marked `TODO(2.Q)` —
-  needs a panel-document zod schema from Security & QA (`@/lib/validation`, 2.Q0).
+- **Validation is authoritative (zod).** The body is validated by
+  `panelDocumentCreateSchema` / `panelDocumentUpdateSchema` from
+  `@/lib/validation` (Security & QA, 2.Q0), bound in 2.B6. `fileUrl` is checked
+  as an http(s) URL. Lead subteam pinning / IDOR stay in the route.
 - **Response summary (for Frontend 2.F5):** success → `{ ok:true, ... }` with
   `documents` (list) / `document` (single) / `id` (delete); failure →
   `{ ok:false, error }`.

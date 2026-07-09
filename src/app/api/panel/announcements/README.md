@@ -86,11 +86,10 @@ Consistent `{ ok:false, error }` shape (Faz 1 convention):
 
 ## Decisions & open items
 
-- **Validation is interim (hand-rolled).** `title`/`body` required + length caps,
-  `audience` enum, `publishedToPublic` boolean. Marked `TODO(2.Q)` in
-  `shared.ts`. **A panel-announcement zod schema is needed from Security & QA**
-  (in `@/lib/validation`), to be bound the same way public forms bind
-  `applicationSchema` / `contactSchema` (cf. task 1.B5).
+- **Validation is authoritative (zod).** The body is validated by
+  `panelAnnouncementCreateSchema` / `panelAnnouncementUpdateSchema` from
+  `@/lib/validation` (owned by Security & QA, task 2.Q0), bound in task 2.B6.
+  Unknown keys are stripped, so `authorId` cannot be injected via the body.
 - **IDOR / lead scope (deferred).** Currently **both admin and lead can
   update/delete any announcement.** PROGRAM.md §8 grants leads CRUD over _their
   own subteam's_ content, so a stricter rule (a lead may only modify

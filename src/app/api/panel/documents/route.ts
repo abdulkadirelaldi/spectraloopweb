@@ -1,7 +1,12 @@
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole, requireApiSession } from "@/lib/auth/guard";
 import { DocumentModel, type DocumentDocument } from "@/models/Document";
-import { DOCUMENT_CATEGORIES, toDocument, validateCreate } from "./shared";
+import { toDocument } from "./shared";
+import {
+  panelDocumentCreateSchema,
+  firstErrorMessage,
+  DOCUMENT_CATEGORIES,
+} from "@/lib/validation";
 
 /**
  * Panel documents collection — /api/panel/documents
@@ -67,9 +72,12 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
-  const parsed = validateCreate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelDocumentCreateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
 
   const { role, subteam: ownSubteam } = gate.session.user;

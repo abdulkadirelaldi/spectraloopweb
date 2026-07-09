@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiSession } from "@/lib/auth/guard";
 import { Task, type TaskDocument } from "@/models/Task";
-import { toTask, validateUpdate } from "../shared";
+import { toTask } from "../shared";
+import { panelTaskUpdateSchema, firstErrorMessage } from "@/lib/validation";
 
 /**
  * Single panel task — /api/panel/tasks/[id]
@@ -79,9 +80,12 @@ export async function PATCH(request: Request, ctx: Ctx): Promise<Response> {
     );
   }
 
-  const parsed = validateUpdate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelTaskUpdateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
   const patch = parsed.data;
 

@@ -112,8 +112,10 @@ Consistent `{ ok:false, error }` shape:
 
 ## Open items
 
-- **Validation is interim (hand-rolled)** in `shared.ts`, marked `TODO(2.Q)`. A
-  panel-task zod schema is needed from Security & QA (`@/lib/validation`, task
-  2.Q0), to be bound like the public form schemas (cf. 1.B5).
+- **Validation is authoritative (zod).** The body is validated by
+  `panelTaskCreateSchema` / `panelTaskUpdateSchema` from `@/lib/validation`
+  (Security & QA, 2.Q0), bound in 2.B6. Validates shape only; subteam pinning,
+  the member "status-only" rule, and IDOR stay in the route/guard. Unknown keys
+  are stripped, so `createdBy` cannot be injected.
 - **Response summary (for Frontend 2.F3):** success → `{ ok:true, ... }` with
   `tasks` (list) / `task` (single) / `id` (delete); failure → `{ ok:false, error }`.

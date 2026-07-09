@@ -3,7 +3,11 @@ import mongoose from "mongoose";
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole, requireApiSession } from "@/lib/auth/guard";
 import { Announcement, type AnnouncementDocument } from "@/models/Announcement";
-import { toAnnouncement, validateUpdate } from "../shared";
+import { toAnnouncement } from "../shared";
+import {
+  panelAnnouncementUpdateSchema,
+  firstErrorMessage,
+} from "@/lib/validation";
 
 /**
  * Single panel announcement — /api/panel/announcements/[id]
@@ -76,9 +80,12 @@ export async function PATCH(request: Request, ctx: Ctx): Promise<Response> {
     );
   }
 
-  const parsed = validateUpdate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelAnnouncementUpdateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
 
   try {
