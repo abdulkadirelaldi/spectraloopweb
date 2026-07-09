@@ -17,6 +17,8 @@ export { Input, Textarea, controlBase } from "./Input";
 export type { InputProps, TextareaProps } from "./Input";
 export { Select } from "./Select";
 export type { SelectProps } from "./Select";
+export { Switch } from "./Switch";
+export type { SwitchProps } from "./Switch";
 export { Field } from "./Field";
 export type { FieldProps } from "./Field";
 export { cn } from "./cn";
