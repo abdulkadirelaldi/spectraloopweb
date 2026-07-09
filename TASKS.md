@@ -64,8 +64,8 @@ oldukları için sırayla ilerler.
 | 2.F3 | Panel: Görevler (birim bazlı Kanban/liste) | Frontend | todo | 2.F1, 2.B3 |
 | 2.F4 | Panel: Üye dizini | Frontend | todo | 2.F1, 2.B4 |
 | 2.F5 | Panel: Dokümanlar + Etkinlik/Takvim | Frontend | todo | 2.F1, 2.B5 |
-| 2.Q0 | Panel input zod şemaları (`@/lib/validation`): announcement/task/member/document/event — Backend'in TODO(2.Q) kancaları için | Güvenlik & QA | in-progress | 2.B2–2.B5 |
-| 2.B6 | Panel zod şemalarını route'lara bağla (TODO(2.Q) → @/lib/validation) | Backend | todo | 2.Q0 |
+| 2.Q0 | Panel input zod şemaları (`@/lib/validation`): announcement/task/member/document/event — Backend'in TODO(2.Q) kancaları için | Güvenlik & QA | done | 2.B2–2.B5 |
+| 2.B6 | Panel zod şemalarını route'lara bağla (TODO(2.Q) → @/lib/validation) | Backend | in-progress | 2.Q0 |
 | 2.Q1 | Panel RBAC E2E: rol bazlı erişim, yetkisiz reddi (admin/lead/member) | Güvenlik & QA | todo | 2.F2–2.F5 |
 
 > Not: Faz 2 planı canlı — görevler ilerledikçe (özellikle panel API/UI) bölünüp
@@ -81,9 +81,9 @@ oldukları için sırayla ilerler.
 - ESLint flat config: `eslint.config.mjs`. Prettier: `.prettierrc` + `.prettierignore`.
 
 ### Bekleyen koordinasyon (şef takip ediyor)
-- **Panel zod şemaları:** Backend panel API'leri (2.B2+) ara-doğrulama + `TODO(2.Q)`
-  ile ilerliyor. Panel API'leri bitince QA tek görevde (2.Q0) tüm panel input
-  şemalarını `@/lib/validation`'a yazacak, Backend 2.B6'da bağlayacak.
+- **Panel zod export'ları (Backend 2.B6'ya — 2.Q0'dan):** `@/lib/validation`'dan
+  `panel{Announcement,Task,Member,Document,Event}{Create,Update}Schema` (10 şema) +
+  `firstErrorMessage`. 5 route'taki `TODO(2.Q)` ara-kontrolleri bunlarla değişecek.
 - ✅ ÇÖZÜLDÜ (1.Q1): `MAIL_FROM` + `TEAM_NOTIFY_EMAIL` .env.example'a eklendi.
 - **API guard (Backend 2.B2–2.B5'e — 2.S2'den):** `@/lib/auth/guard`'dan
   `requireApiSession()`, `requireApiRole(allowed: Role|Role[])`, `requireApiMinRole(min: Role)`.
@@ -206,3 +206,5 @@ oldukları için sırayla ilerler.
 - 2026-07-04 — Şef: 2.B5 done (Document/Event modelleri + panel documents/events API,
   documents IDOR, fileUrl metadata/R2 Faz3'e ertelendi). **TÜM PANEL API'LERİ TAMAM.**
   2.Q0 açıldı (QA — 5 panel input zod şeması). Push edildi.
+- 2026-07-04 — Şef: 2.Q0 done (10 panel şeması panel*{Create,Update}Schema
+  @/lib/validation, testler yeşil). 2.B6 açıldı (Backend — şemaları route'lara bağla). Push edildi.
