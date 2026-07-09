@@ -54,8 +54,8 @@ oldukları için sırayla ilerler.
 | 2.B1 | User + Subteam Mongoose modelleri (passwordHash, role, active, subteam) + admin seed script (bcrypt hash) | Backend | done | 0.4 |
 | 2.S1 | Auth.js kurulumu: Credentials provider + authorize (User+bcrypt) + JWT/session'da rol + AUTH_SECRET + api/auth/[...nextauth] | Güvenlik & QA | done | 2.B1 |
 | 2.S2 | RBAC helper'ları (rol kontrol) + panel route koruma (proxy.ts /panel/**) + auth & RBAC testleri (giriş, yetkisiz erişim reddi) | Güvenlik & QA | done | 2.S1 |
-| 2.F0 | Giriş sayfası UI (`/giris`) — Auth.js signIn ile Credentials formu | Frontend | in-progress | 2.S1 |
-| 2.F1 | Panel shell: `(panel)/panel` layout + nav + dashboard + oturum durumu/çıkış | Frontend | todo | 2.S2 |
+| 2.F0 | Giriş sayfası UI (`/giris`) — Auth.js signIn ile Credentials formu | Frontend | done | 2.S1 |
+| 2.F1 | Panel shell: `(panel)/panel` layout + nav + dashboard + oturum durumu/çıkış | Frontend | in-progress | 2.S2 |
 | 2.B2 | Panel API: announcements write (CRUD) + RBAC (lead+ yayınlar) — `/api/panel/*` deseni | Backend | done | 2.S2 |
 | 2.B3 | Panel API: tasks CRUD (birim bazlı) + RBAC | Backend | done | 2.S2 |
 | 2.B4 | Panel API: members (üye dizini oku + admin CRUD) + RBAC | Backend | done | 2.S2 |
@@ -211,3 +211,6 @@ oldukları için sırayla ilerler.
 - 2026-07-04 — Şef: 2.B6 done (10 panel route zod'a bağlandı, TODO(2.Q) temiz, RBAC/response
   korundu). **Backend+güvenlik panel için hazır.** Worker Frontend'e geçti; 2.F0 açıldı
   (giriş sayfası /giris). Push edildi.
+- 2026-07-04 — Şef: 2.F0 done (/giris server action signIn, open-redirect korumalı
+  callbackUrl, yeniden kullanılabilir LogoutButton @/components/auth). 2.F1 açıldı
+  (panel shell). Push edildi.
