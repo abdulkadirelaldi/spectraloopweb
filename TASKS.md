@@ -59,12 +59,12 @@ oldukları için sırayla ilerler.
 | 2.B2 | Panel API: announcements write (CRUD) + RBAC (lead+ yayınlar) — `/api/panel/*` deseni | Backend | done | 2.S2 |
 | 2.B3 | Panel API: tasks CRUD (birim bazlı) + RBAC | Backend | done | 2.S2 |
 | 2.B4 | Panel API: members (üye dizini oku + admin CRUD) + RBAC | Backend | done | 2.S2 |
-| 2.B5 | Panel API: documents (metadata; R2 upload ayrı değerlendirilecek) + events + RBAC | Backend | in-progress | 2.S2 |
+| 2.B5 | Panel API: documents (metadata; R2 upload ayrı değerlendirilecek) + events + RBAC | Backend | done | 2.S2 |
 | 2.F2 | Panel: Duyurular (liste + oluştur/yayınla) | Frontend | todo | 2.F1, 2.B2 |
 | 2.F3 | Panel: Görevler (birim bazlı Kanban/liste) | Frontend | todo | 2.F1, 2.B3 |
 | 2.F4 | Panel: Üye dizini | Frontend | todo | 2.F1, 2.B4 |
 | 2.F5 | Panel: Dokümanlar + Etkinlik/Takvim | Frontend | todo | 2.F1, 2.B5 |
-| 2.Q0 | Panel input zod şemaları (`@/lib/validation`): announcement/task/member/document/event — Backend'in TODO(2.Q) kancaları için | Güvenlik & QA | todo | 2.B2–2.B5 |
+| 2.Q0 | Panel input zod şemaları (`@/lib/validation`): announcement/task/member/document/event — Backend'in TODO(2.Q) kancaları için | Güvenlik & QA | in-progress | 2.B2–2.B5 |
 | 2.B6 | Panel zod şemalarını route'lara bağla (TODO(2.Q) → @/lib/validation) | Backend | todo | 2.Q0 |
 | 2.Q1 | Panel RBAC E2E: rol bazlı erişim, yetkisiz reddi (admin/lead/member) | Güvenlik & QA | todo | 2.F2–2.F5 |
 
@@ -203,3 +203,6 @@ oldukları için sırayla ilerler.
   okuma tüm birimlerde/yazma kendi biriminde). 2.B4 açıldı (panel members). Push edildi.
 - 2026-07-04 — Şef: 2.B4 done (panel members, güvenli projeksiyon [passwordHash asla],
   admin-only oluştur/sil/rol, hashPassword). 2.B5 açıldı (panel documents+events, son API). Push edildi.
+- 2026-07-04 — Şef: 2.B5 done (Document/Event modelleri + panel documents/events API,
+  documents IDOR, fileUrl metadata/R2 Faz3'e ertelendi). **TÜM PANEL API'LERİ TAMAM.**
+  2.Q0 açıldı (QA — 5 panel input zod şeması). Push edildi.
