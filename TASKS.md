@@ -55,12 +55,12 @@ oldukları için sırayla ilerler.
 | 2.S1 | Auth.js kurulumu: Credentials provider + authorize (User+bcrypt) + JWT/session'da rol + AUTH_SECRET + api/auth/[...nextauth] | Güvenlik & QA | done | 2.B1 |
 | 2.S2 | RBAC helper'ları (rol kontrol) + panel route koruma (proxy.ts /panel/**) + auth & RBAC testleri (giriş, yetkisiz erişim reddi) | Güvenlik & QA | done | 2.S1 |
 | 2.F0 | Giriş sayfası UI (`/giris`) — Auth.js signIn ile Credentials formu | Frontend | done | 2.S1 |
-| 2.F1 | Panel shell: `(panel)/panel` layout + nav + dashboard + oturum durumu/çıkış | Frontend | in-progress | 2.S2 |
+| 2.F1 | Panel shell: `(panel)/panel` layout + nav + dashboard + oturum durumu/çıkış | Frontend | done | 2.S2 |
 | 2.B2 | Panel API: announcements write (CRUD) + RBAC (lead+ yayınlar) — `/api/panel/*` deseni | Backend | done | 2.S2 |
 | 2.B3 | Panel API: tasks CRUD (birim bazlı) + RBAC | Backend | done | 2.S2 |
 | 2.B4 | Panel API: members (üye dizini oku + admin CRUD) + RBAC | Backend | done | 2.S2 |
 | 2.B5 | Panel API: documents (metadata; R2 upload ayrı değerlendirilecek) + events + RBAC | Backend | done | 2.S2 |
-| 2.F2 | Panel: Duyurular (liste + oluştur/yayınla) | Frontend | todo | 2.F1, 2.B2 |
+| 2.F2 | Panel: Duyurular (liste + oluştur/yayınla) | Frontend | in-progress | 2.F1, 2.B2 |
 | 2.F3 | Panel: Görevler (birim bazlı Kanban/liste) | Frontend | todo | 2.F1, 2.B3 |
 | 2.F4 | Panel: Üye dizini | Frontend | todo | 2.F1, 2.B4 |
 | 2.F5 | Panel: Dokümanlar + Etkinlik/Takvim | Frontend | todo | 2.F1, 2.B5 |
@@ -119,6 +119,15 @@ oldukları için sırayla ilerler.
   announcements: Announcement[]}`, `createdAt DESC`, SADECE `publishedToPublic:true`,
   `revalidate=300`; hata `500 {ok:false,error}`. Seed: `npm run seed:announcements`.
   Detay: api/announcements/README.md.
+
+### Panel bileşenleri (2.F1 çıktısı — panel sayfa görevleri okusun)
+- Kabuk: `(panel)/panel/layout.tsx` auth() ile korumalı (girişsiz → /giris?callbackUrl).
+  `PanelChrome` (sidebar+topbar), nav config `src/components/panel/nav.ts` (rol-farkında;
+  yeni panel sayfası eklenince buraya link eklenir).
+- Yeniden kullanılabilir: `PanelPageHeader`, `PanelCard` (@/components/panel, index barrel).
+  Panel sayfaları (2.F2–2.F5) bunları kullanır. Çıkış: `LogoutButton` @/components/auth.
+- Panel API deseni: `/api/panel/*`, response `{ok, ...}`, guard'lı (okuma session,
+  yazma rol). RBAC UI'da gizleme sadece UX — API zaten guard'lı (PROGRAM §11).
 
 ### UI primitifleri (1.1 çıktısı — Frontend sayfa görevleri okusun)
 - Import: `@/components/ui` (barrel index.ts). `cn` helper: `@/components/ui/cn`.
@@ -214,3 +223,5 @@ oldukları için sırayla ilerler.
 - 2026-07-04 — Şef: 2.F0 done (/giris server action signIn, open-redirect korumalı
   callbackUrl, yeniden kullanılabilir LogoutButton @/components/auth). 2.F1 açıldı
   (panel shell). Push edildi.
+- 2026-07-04 — Şef: 2.F1 done (panel shell: layout auth() koruma, PanelChrome,
+  rol-farkında nav.ts, PanelPageHeader/PanelCard). 2.F2 açıldı (panel Duyurular). Push edildi.
