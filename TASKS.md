@@ -61,8 +61,8 @@ oldukları için sırayla ilerler.
 | 2.B4 | Panel API: members (üye dizini oku + admin CRUD) + RBAC | Backend | done | 2.S2 |
 | 2.B5 | Panel API: documents (metadata; R2 upload ayrı değerlendirilecek) + events + RBAC | Backend | done | 2.S2 |
 | 2.F2 | Panel: Duyurular (liste + oluştur/yayınla) | Frontend | done | 2.F1, 2.B2 |
-| 2.F3 | Panel: Görevler (birim bazlı Kanban/liste) | Frontend | in-progress | 2.F1, 2.B3 |
-| 2.F4 | Panel: Üye dizini | Frontend | todo | 2.F1, 2.B4 |
+| 2.F3 | Panel: Görevler (birim bazlı Kanban/liste) | Frontend | done | 2.F1, 2.B3 |
+| 2.F4 | Panel: Üye dizini | Frontend | in-progress | 2.F1, 2.B4 |
 | 2.F5 | Panel: Dokümanlar + Etkinlik/Takvim | Frontend | todo | 2.F1, 2.B5 |
 | 2.Q0 | Panel input zod şemaları (`@/lib/validation`): announcement/task/member/document/event — Backend'in TODO(2.Q) kancaları için | Güvenlik & QA | done | 2.B2–2.B5 |
 | 2.B6 | Panel zod şemalarını route'lara bağla (TODO(2.Q) → @/lib/validation) | Backend | done | 2.Q0 |
@@ -231,3 +231,5 @@ oldukları için sırayla ilerler.
   rol-farkında nav.ts, PanelPageHeader/PanelCard). 2.F2 açıldı (panel Duyurular). Push edildi.
 - 2026-07-04 — Şef: 2.F2 done (panel Duyurular: server fetch + rol geçidi +
   AnnouncementsManager/Form, CRUD deseni kuruldu). 2.F3 açıldı (panel Görevler). Push edildi.
+- 2026-07-04 — Şef: 2.F3 done (panel Görevler Kanban, TasksManager/Form, rol-farkında
+  aksiyonlar). 2.F4 açıldı (panel Üye dizini). Push edildi.
