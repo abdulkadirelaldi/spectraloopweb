@@ -29,12 +29,16 @@ export function DocumentsManager({
   role,
   userSubteam,
   subteamOptions,
+  allowedContentTypes,
+  maxBytes,
   initialItems,
   initialError,
 }: {
   role: Role;
   userSubteam?: string;
   subteamOptions: readonly string[];
+  allowedContentTypes: readonly string[];
+  maxBytes: number;
   initialItems: Document[];
   initialError: boolean;
 }) {
@@ -155,6 +159,8 @@ export function DocumentsManager({
             role={role}
             userSubteam={userSubteam}
             subteamOptions={subteamOptions}
+            allowedContentTypes={allowedContentTypes}
+            maxBytes={maxBytes}
             submitLabel="Ekle"
             onSubmit={(v) => submitDocument(API, "POST", v)}
             onCancel={() => setEditing(null)}
@@ -168,6 +174,8 @@ export function DocumentsManager({
             role={role}
             userSubteam={userSubteam}
             subteamOptions={subteamOptions}
+            allowedContentTypes={allowedContentTypes}
+            maxBytes={maxBytes}
             initial={{
               title: editing.title,
               fileUrl: editing.fileUrl,

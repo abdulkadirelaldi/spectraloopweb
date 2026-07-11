@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button, Field, Input, Select } from "@/components/ui";
+import { FileUpload } from "./FileUpload";
 import type { DocumentCategory, Role } from "@/types";
 
 export type DocumentFormValues = {
@@ -17,6 +18,9 @@ export type DocumentFormProps = {
   role: Role;
   userSubteam?: string;
   subteamOptions: readonly string[];
+  /** Upload constraints from @/lib/utils/r2 (passed by the server page). */
+  allowedContentTypes: readonly string[];
+  maxBytes: number;
   initial?: Partial<DocumentFormValues>;
   submitLabel?: string;
   onSubmit: (values: DocumentFormValues) => Promise<DocumentSubmitResult>;
@@ -44,6 +48,8 @@ export function DocumentForm({
   role,
   userSubteam,
   subteamOptions,
+  allowedContentTypes,
+  maxBytes,
   initial,
   submitLabel = "Kaydet",
   onSubmit,
@@ -64,6 +70,7 @@ export function DocumentForm({
   }>({});
   const [serverError, setServerError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [uploadBusy, setUploadBusy] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -73,9 +80,10 @@ export function DocumentForm({
       {};
     if (!title.trim()) nextErrors.title = "Başlık zorunludur.";
     else if (title.length > 200) nextErrors.title = "Başlık çok uzun.";
-    if (!fileUrl.trim()) nextErrors.fileUrl = "Dosya bağlantısı zorunludur.";
+    if (!fileUrl.trim())
+      nextErrors.fileUrl = "Bir dosya yükleyin veya bağlantı girin.";
     else if (!isHttpUrl(fileUrl.trim()))
-      nextErrors.fileUrl = "Geçerli bir http(s) bağlantısı girin.";
+      nextErrors.fileUrl = "Geçerli bir http(s) bağlantısı gerekli.";
     if (showSubteam && !subteam.trim()) nextErrors.subteam = "Alt ekip seçin.";
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
@@ -102,20 +110,52 @@ export function DocumentForm({
         />
       </Field>
 
-      <Field
-        label="Dosya bağlantısı (URL)"
-        error={errors.fileUrl}
-        hint="Şimdilik önceden yüklenmiş bir dosyanın bağlantısını girin. Panel içi dosya yükleme yakında eklenecek."
-        required
-      >
-        <Input
-          type="url"
-          placeholder="https://…"
-          value={fileUrl}
-          onChange={(e) => setFileUrl(e.target.value)}
+      {/* File upload (primary) */}
+      <div className="flex flex-col gap-1.5">
+        <span className="text-foreground text-sm font-medium">
+          Dosya
+          <span aria-hidden="true" className="ml-0.5 text-red-600">
+            *
+          </span>
+        </span>
+        <FileUpload
+          allowedContentTypes={allowedContentTypes}
+          maxBytes={maxBytes}
+          currentUrl={fileUrl}
           disabled={submitting}
+          onBusyChange={setUploadBusy}
+          onUploaded={(url) => {
+            setFileUrl(url);
+            setErrors((prev) => ({ ...prev, fileUrl: undefined }));
+          }}
         />
-      </Field>
+        {errors.fileUrl ? (
+          <p role="alert" className="text-xs font-medium text-red-600">
+            {errors.fileUrl}
+          </p>
+        ) : null}
+
+        {/* Advanced: external link instead of an upload */}
+        <details className="mt-1">
+          <summary className="text-brand-600 dark:text-brand-300 cursor-pointer text-xs font-medium">
+            Bağlantı ile ekle (gelişmiş)
+          </summary>
+          <div className="mt-2">
+            <Input
+              type="url"
+              placeholder="https://…"
+              value={fileUrl}
+              onChange={(e) => setFileUrl(e.target.value)}
+              disabled={submitting}
+              aria-label="Harici dosya bağlantısı"
+            />
+            <p className="text-muted mt-1 text-xs">
+              Harici bir dosya (ör. paylaşımlı sürücü) için bağlantı
+              girebilirsiniz.
+            </p>
+          </div>
+        </details>
+      </div>
 
       <Field label="Kategori">
         <Select
@@ -157,7 +197,7 @@ export function DocumentForm({
       ) : null}
 
       <div className="flex gap-3">
-        <Button type="submit" disabled={submitting}>
+        <Button type="submit" disabled={submitting || uploadBusy}>
           {submitting ? "Kaydediliyor…" : submitLabel}
         </Button>
         <Button

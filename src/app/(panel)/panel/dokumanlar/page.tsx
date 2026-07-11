@@ -3,6 +3,9 @@ import { cookies } from "next/headers";
 import { auth } from "@/lib/auth";
 import { PanelPageHeader } from "@/components/panel";
 import { DocumentsManager } from "@/components/panel/DocumentsManager";
+// Server-side import: keeps the AWS SDK out of the client bundle; only the
+// plain constants (string[] + number) are passed down as props.
+import { UPLOAD_ALLOWED_CONTENT_TYPES, UPLOAD_MAX_BYTES } from "@/lib/utils/r2";
 import type { Document, Role } from "@/types";
 
 export const metadata: Metadata = {
@@ -73,7 +76,7 @@ export default async function PanelDocumentsPage() {
         title="Dokümanlar"
         description={
           canCreate
-            ? "Doküman arşivini yönetin; bağlantı ile yeni doküman ekleyin."
+            ? "Doküman arşivini yönetin; dosya yükleyerek yeni doküman ekleyin."
             : "Takım doküman arşivini görüntüleyin."
         }
       />
@@ -81,6 +84,8 @@ export default async function PanelDocumentsPage() {
         role={role}
         userSubteam={userSubteam}
         subteamOptions={subteamOptions}
+        allowedContentTypes={[...UPLOAD_ALLOWED_CONTENT_TYPES]}
+        maxBytes={UPLOAD_MAX_BYTES}
         initialItems={documents}
         initialError={documentsError}
       />
