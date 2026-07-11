@@ -29,6 +29,9 @@ const ICONS: Record<PanelIconKey, ReactNode> = {
   members: (
     <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm7 0a3 3 0 1 0 0-6M3 20a6 6 0 0 1 12 0M15 14a6 6 0 0 1 6 6" />
   ),
+  applications: (
+    <path d="M9 4h6l1 2h3v14H5V6h3l1-2Zm-1 9 2 2 4-4M9 4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1" />
+  ),
 };
 
 function isActive(pathname: string, href: string): boolean {
