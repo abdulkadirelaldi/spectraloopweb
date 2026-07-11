@@ -84,8 +84,8 @@ oldukları için sırayla ilerler.
 | 3.F1 | Panel: Başvurular sayfası (liste + durum güncelle) | Frontend | done | 3.B1, 2.F1 |
 | 3.B2 | Inventory modeli + tip (src/types) + /api/panel/inventory CRUD + RBAC | Backend | done | 2.S2 |
 | 3.F2 | Panel: Envanter sayfası | Frontend | done | 3.B2 |
-| 3.B3 | Budget/Expense modeli + tip + /api/panel/budget CRUD + RBAC | Backend | in-progress | 2.S2 |
-| 3.F3 | Panel: Bütçe/harcama sayfası | Frontend | todo | 3.B3 |
+| 3.B3 | Budget/Expense modeli + tip + /api/panel/budget CRUD + RBAC | Backend | done | 2.S2 |
+| 3.F3 | Panel: Bütçe/harcama sayfası | Frontend | in-progress | 3.B3 |
 | 3.B4 | R2 dosya yükleme: presigned URL API + entegrasyon (Cloudflare R2) | Backend | todo | 2.S2 |
 | 3.S1 | Güvenli dosya yükleme: tip/boyut validasyonu + güvenlik denetimi + testler | Güvenlik & QA | todo | 3.B4 |
 | 3.F4 | Panel: doküman yükleme UI (R2) — "yakında" yerine gerçek upload | Frontend | todo | 3.B4, 3.S1 |
@@ -280,3 +280,6 @@ oldukları için sırayla ilerler.
   available|in-use|maintenance|depleted. 3.F2 açıldı (panel Envanter). Push edildi.
 - 2026-07-11 — Şef: 3.F2 done (panel Envanter, InventoryManager/Form). 3.B3 açıldı
   (Budget/Expense model+tip+API). Push edildi.
+- 2026-07-11 — Şef: 3.B3 done (Expense tip+model+/api/panel/budget, onay ayrımı:
+  status=admin, lead kendi pending'i, member 403). ExpenseStatus: pending|approved|
+  reimbursed|rejected. 3.F3 açıldı (panel Bütçe). Push edildi.
