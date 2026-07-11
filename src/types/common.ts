@@ -60,6 +60,11 @@ export type InventoryStatus =
   "available" | "in-use" | "maintenance" | "depleted";
 
 /**
+ * Expense approval status (Faz 3 — not in §8; added via chief approval, task 3.B3).
+ */
+export type ExpenseStatus = "pending" | "approved" | "reimbursed" | "rejected";
+
+/**
  * Fields every persisted entity carries.
  * Per task 0.4: each entity has a string `id` and a `createdAt` timestamp,
  * even where §8 did not list `createdAt` explicitly (Subteam, Event, Sponsor).

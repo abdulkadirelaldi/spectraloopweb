@@ -23,3 +23,4 @@ export * from "./sponsor";
 export * from "./application";
 export * from "./contact";
 export * from "./inventory";
+export * from "./expense";
