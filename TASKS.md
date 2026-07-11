@@ -4,7 +4,7 @@
 > Durum değerleri: `todo` · `in-progress` · `blocked` · `review` · `done`
 > Kural: aynı anda tek worker meşgul. Bir görev `done` olup commit'lenince şef sıradakini açar.
 
-## Aktif Faz: — (Faz 0 ✅ · Faz 1 ✅ · Faz 2 ✅ tamamlandı — sıradaki: deploy? / Faz 3)
+## Aktif Faz: Faz 3 — Gelişmiş Panel + CMS (Faz 0 ✅ · Faz 1 ✅ · Faz 2 ✅)
 
 ### Faz 0 — Kurulum (TAMAMLANDI ✅)
 
@@ -70,6 +70,31 @@ oldukları için sırayla ilerler.
 
 > Not: Faz 2 planı canlı — görevler ilerledikçe (özellikle panel API/UI) bölünüp
 > rafine edilebilir. R2 dosya yükleme karmaşıksa Faz 3'e kaydırılabilir.
+
+## Faz 3 — Gelişmiş Panel + CMS Bağı (AKTİF)
+
+> Kapsam (PROGRAM §10): başvuru yönetimi, envanter, bütçe, R2 dosya yükleme,
+> CMS bağı (panelden public yayın). Backend-sözleşme-önce sırası korunur.
+> Yeni domain tipleri (Inventory, Budget/Expense) şef-onaylı: ilgili Backend
+> görevi src/types'a ekler (şef=ben onaylıyorum). Deploy Faz 3 sonrasına ertelendi.
+
+| id | görev | agent | durum | bağımlılık |
+|----|-------|-------|-------|------------|
+| 3.B1 | Panel API: applications (başvuru) list/view/status güncelle + RBAC (admin/lead) — mevcut Application modeli | Backend | in-progress | 2.S2 |
+| 3.F1 | Panel: Başvurular sayfası (liste + durum güncelle) | Frontend | todo | 3.B1, 2.F1 |
+| 3.B2 | Inventory modeli + tip (src/types) + /api/panel/inventory CRUD + RBAC | Backend | todo | 2.S2 |
+| 3.F2 | Panel: Envanter sayfası | Frontend | todo | 3.B2 |
+| 3.B3 | Budget/Expense modeli + tip + /api/panel/budget CRUD + RBAC | Backend | todo | 2.S2 |
+| 3.F3 | Panel: Bütçe/harcama sayfası | Frontend | todo | 3.B3 |
+| 3.B4 | R2 dosya yükleme: presigned URL API + entegrasyon (Cloudflare R2) | Backend | todo | 2.S2 |
+| 3.S1 | Güvenli dosya yükleme: tip/boyut validasyonu + güvenlik denetimi + testler | Güvenlik & QA | todo | 3.B4 |
+| 3.F4 | Panel: doküman yükleme UI (R2) — "yakında" yerine gerçek upload | Frontend | todo | 3.B4, 3.S1 |
+| 3.B5 | Panel API: sponsors CRUD (CMS — panelden yönet/yayınla) + RBAC | Backend | todo | 2.S2 |
+| 3.F5 | Panel: Sponsor yönetimi (CMS bağı — panelden public'e yansır) | Frontend | todo | 3.B5 |
+| 3.Q1 | Faz 3 zod şemaları (inventory/budget/application-status) route'a bağlı + RBAC/upload testleri | Güvenlik & QA | todo | 3.B1–3.B5 |
+
+> Not: Faz 3 planı canlı; görevler ilerledikçe rafine edilebilir. Panel zod deseni
+> Faz 2'deki gibi (Backend ara-doğrulama + TODO(3.Q) → QA 3.Q1'de şema + bağlama).
 
 ---
 ### Scaffold gerçekleri (0.1 çıktısı — tüm agent'lar okusun)
@@ -240,3 +265,5 @@ oldukları için sırayla ilerler.
 - 2026-07-11 — Şef: 2.Q1 done (panel RBAC entegrasyon testleri + panel-api-auth E2E;
   130 unit/entegrasyon + 34 E2E yeşil). **🎉 FAZ 2 (AUTH + PANEL) TAMAMEN TAMAMLANDI.**
   Karar bekliyor: (A) Vercel deploy mi, (B) Faz 3 (envanter/bütçe/başvuru + R2 + CMS) mi. Push edildi.
+- 2026-07-11 — Kullanıcı kararı: **Faz 3 (Gelişmiş Panel)**. Deploy ertelendi.
+  Şef: Faz 3 planı eklendi (12 görev). 3.B1 açıldı (Backend — panel başvuru yönetimi). Push edildi.
