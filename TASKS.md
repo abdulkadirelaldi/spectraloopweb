@@ -4,7 +4,7 @@
 > Durum değerleri: `todo` · `in-progress` · `blocked` · `review` · `done`
 > Kural: aynı anda tek worker meşgul. Bir görev `done` olup commit'lenince şef sıradakini açar.
 
-## Aktif Faz: — (Faz 0 ✅ · Faz 1 ✅ tamamlandı — sıradaki: deploy? / Faz 2 Auth+Panel)
+## Aktif Faz: — (Faz 0 ✅ · Faz 1 ✅ · Faz 2 ✅ tamamlandı — sıradaki: deploy? / Faz 3)
 
 ### Faz 0 — Kurulum (TAMAMLANDI ✅)
 
@@ -42,7 +42,7 @@ oldukları için sırayla ilerler.
 | 1.B5 | zod şemalarını route'lara bağla: `/api/applications` + `/api/contact` içindeki el-yazımı `validate()` yerine `@/lib/validation` şemaları (TODO(1.Q1) kancaları) | Backend | done | 1.Q1 |
 | 1.Q2 | Public smoke/E2E testleri (sayfalar yükleniyor + form submit akışı) | Güvenlik & QA | done | 1.2–1.7, 1.B5 |
 
-## Faz 2 — Auth + Panel Çekirdek (AKTİF)
+## Faz 2 — Auth + Panel Çekirdek (TAMAMLANDI ✅)
 
 > PROGRAM §10 sırası: Auth.js + RBAC + testleri (Güvenlik & QA lider) → panel
 > API'leri (Backend) → panel UI (Frontend). Kural: auth kur → auth testini yaz → panel.
@@ -66,7 +66,7 @@ oldukları için sırayla ilerler.
 | 2.F5 | Panel: Dokümanlar + Etkinlik/Takvim | Frontend | done | 2.F1, 2.B5 |
 | 2.Q0 | Panel input zod şemaları (`@/lib/validation`): announcement/task/member/document/event — Backend'in TODO(2.Q) kancaları için | Güvenlik & QA | done | 2.B2–2.B5 |
 | 2.B6 | Panel zod şemalarını route'lara bağla (TODO(2.Q) → @/lib/validation) | Backend | done | 2.Q0 |
-| 2.Q1 | Panel RBAC E2E: rol bazlı erişim, yetkisiz reddi (admin/lead/member) | Güvenlik & QA | in-progress | 2.F2–2.F5 |
+| 2.Q1 | Panel RBAC E2E: rol bazlı erişim, yetkisiz reddi (admin/lead/member) | Güvenlik & QA | done | 2.F2–2.F5 |
 
 > Not: Faz 2 planı canlı — görevler ilerledikçe (özellikle panel API/UI) bölünüp
 > rafine edilebilir. R2 dosya yükleme karmaşıksa Faz 3'e kaydırılabilir.
@@ -237,3 +237,6 @@ oldukları için sırayla ilerler.
   rol-farkında yönetim). 2.F5 açıldı (panel Dokümanlar+Takvim, son panel sayfası). Push edildi.
 - 2026-07-04 — Şef: 2.F5 done (panel Dokümanlar + Takvim, Documents/Events Manager/Form).
   **TÜM PANEL UI'I TAMAM.** Son Faz 2 görevi 2.Q1 açıldı (panel RBAC E2E). Push edildi.
+- 2026-07-11 — Şef: 2.Q1 done (panel RBAC entegrasyon testleri + panel-api-auth E2E;
+  130 unit/entegrasyon + 34 E2E yeşil). **🎉 FAZ 2 (AUTH + PANEL) TAMAMEN TAMAMLANDI.**
+  Karar bekliyor: (A) Vercel deploy mi, (B) Faz 3 (envanter/bütçe/başvuru + R2 + CMS) mi. Push edildi.
