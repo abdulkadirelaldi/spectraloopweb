@@ -21,7 +21,8 @@ export type PanelIconKey =
   | "documents"
   | "calendar"
   | "members"
-  | "applications";
+  | "applications"
+  | "inventory";
 
 const RANK: Record<Role, number> = { member: 1, lead: 2, admin: 3 };
 
@@ -31,6 +32,7 @@ export const PANEL_NAV: readonly PanelNavItem[] = [
   { href: "/panel/gorevler", label: "Görevler", icon: "tasks" },
   { href: "/panel/dokumanlar", label: "Dokümanlar", icon: "documents" },
   { href: "/panel/takvim", label: "Takvim", icon: "calendar" },
+  { href: "/panel/envanter", label: "Envanter", icon: "inventory" },
   { href: "/panel/uyeler", label: "Üyeler", icon: "members" },
   // Applications hold applicant PII → lead and up only (members never see it).
   {

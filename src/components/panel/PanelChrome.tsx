@@ -32,6 +32,7 @@ const ICONS: Record<PanelIconKey, ReactNode> = {
   applications: (
     <path d="M9 4h6l1 2h3v14H5V6h3l1-2Zm-1 9 2 2 4-4M9 4a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1" />
   ),
+  inventory: <path d="M3 7l9-4 9 4-9 4-9-4Zm0 0v10l9 4 9-4V7M12 11v10" />,
 };
 
 function isActive(pathname: string, href: string): boolean {
