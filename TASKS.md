@@ -83,8 +83,8 @@ oldukları için sırayla ilerler.
 | 3.B1 | Panel API: applications (başvuru) list/view/status güncelle + RBAC (admin/lead) — mevcut Application modeli | Backend | done | 2.S2 |
 | 3.F1 | Panel: Başvurular sayfası (liste + durum güncelle) | Frontend | done | 3.B1, 2.F1 |
 | 3.B2 | Inventory modeli + tip (src/types) + /api/panel/inventory CRUD + RBAC | Backend | done | 2.S2 |
-| 3.F2 | Panel: Envanter sayfası | Frontend | in-progress | 3.B2 |
-| 3.B3 | Budget/Expense modeli + tip + /api/panel/budget CRUD + RBAC | Backend | todo | 2.S2 |
+| 3.F2 | Panel: Envanter sayfası | Frontend | done | 3.B2 |
+| 3.B3 | Budget/Expense modeli + tip + /api/panel/budget CRUD + RBAC | Backend | in-progress | 2.S2 |
 | 3.F3 | Panel: Bütçe/harcama sayfası | Frontend | todo | 3.B3 |
 | 3.B4 | R2 dosya yükleme: presigned URL API + entegrasyon (Cloudflare R2) | Backend | todo | 2.S2 |
 | 3.S1 | Güvenli dosya yükleme: tip/boyut validasyonu + güvenlik denetimi + testler | Güvenlik & QA | todo | 3.B4 |
@@ -278,3 +278,5 @@ oldukları için sırayla ilerler.
 - 2026-07-11 — Şef: 3.B2 done (Inventory tip+model+API, birim-bazlı IDOR). Inventory:
   {name,category,quantity,unit,location?,subteam?,status,notes?}; InventoryStatus:
   available|in-use|maintenance|depleted. 3.F2 açıldı (panel Envanter). Push edildi.
+- 2026-07-11 — Şef: 3.F2 done (panel Envanter, InventoryManager/Form). 3.B3 açıldı
+  (Budget/Expense model+tip+API). Push edildi.
