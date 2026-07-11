@@ -13,6 +13,8 @@ export type FileUploadProps = {
   onUploaded: (fileUrl: string) => void;
   /** Notifies the parent while a request/upload is in flight (to gate submit). */
   onBusyChange?: (busy: boolean) => void;
+  /** Override the default allowed-types hint (e.g. logos: images only). */
+  hint?: string;
   disabled?: boolean;
 };
 
@@ -65,6 +67,7 @@ export function FileUpload({
   currentUrl,
   onUploaded,
   onBusyChange,
+  hint,
   disabled,
 }: FileUploadProps) {
   const [state, setState] = useState<State>("idle");
@@ -166,8 +169,8 @@ export function FileUpload({
       />
 
       <p className="text-muted text-xs">
-        İzin verilen türler: PDF, görsel, Office belgeleri, zip · en fazla{" "}
-        {maxMb} MB.
+        {hint ??
+          `İzin verilen türler: PDF, görsel, Office belgeleri, zip · en fazla ${maxMb} MB.`}
       </p>
 
       {busy ? (

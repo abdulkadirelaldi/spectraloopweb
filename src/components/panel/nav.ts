@@ -23,7 +23,8 @@ export type PanelIconKey =
   | "members"
   | "applications"
   | "inventory"
-  | "budget";
+  | "budget"
+  | "sponsors";
 
 const RANK: Record<Role, number> = { member: 1, lead: 2, admin: 3 };
 
@@ -44,6 +45,13 @@ export const PANEL_NAV: readonly PanelNavItem[] = [
   },
   // Financial data → lead and up only (members never see it).
   { href: "/panel/butce", label: "Bütçe", icon: "budget", minRole: "lead" },
+  // Sponsor CMS → admin only (org-level brand asset).
+  {
+    href: "/panel/sponsorlar",
+    label: "Sponsorlar",
+    icon: "sponsors",
+    minRole: "admin",
+  },
 ];
 
 /** Nav items visible to `role`, honoring each item's `minRole`. */
