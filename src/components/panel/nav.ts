@@ -22,7 +22,8 @@ export type PanelIconKey =
   | "calendar"
   | "members"
   | "applications"
-  | "inventory";
+  | "inventory"
+  | "budget";
 
 const RANK: Record<Role, number> = { member: 1, lead: 2, admin: 3 };
 
@@ -41,6 +42,8 @@ export const PANEL_NAV: readonly PanelNavItem[] = [
     icon: "applications",
     minRole: "lead",
   },
+  // Financial data → lead and up only (members never see it).
+  { href: "/panel/butce", label: "Bütçe", icon: "budget", minRole: "lead" },
 ];
 
 /** Nav items visible to `role`, honoring each item's `minRole`. */
