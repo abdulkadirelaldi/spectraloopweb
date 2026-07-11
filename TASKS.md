@@ -81,8 +81,8 @@ oldukları için sırayla ilerler.
 | id | görev | agent | durum | bağımlılık |
 |----|-------|-------|-------|------------|
 | 3.B1 | Panel API: applications (başvuru) list/view/status güncelle + RBAC (admin/lead) — mevcut Application modeli | Backend | done | 2.S2 |
-| 3.F1 | Panel: Başvurular sayfası (liste + durum güncelle) | Frontend | in-progress | 3.B1, 2.F1 |
-| 3.B2 | Inventory modeli + tip (src/types) + /api/panel/inventory CRUD + RBAC | Backend | todo | 2.S2 |
+| 3.F1 | Panel: Başvurular sayfası (liste + durum güncelle) | Frontend | done | 3.B1, 2.F1 |
+| 3.B2 | Inventory modeli + tip (src/types) + /api/panel/inventory CRUD + RBAC | Backend | in-progress | 2.S2 |
 | 3.F2 | Panel: Envanter sayfası | Frontend | todo | 3.B2 |
 | 3.B3 | Budget/Expense modeli + tip + /api/panel/budget CRUD + RBAC | Backend | todo | 2.S2 |
 | 3.F3 | Panel: Bütçe/harcama sayfası | Frontend | todo | 3.B3 |
@@ -151,6 +151,9 @@ oldukları için sırayla ilerler.
   yeni panel sayfası eklenince buraya link eklenir).
 - Yeniden kullanılabilir: `PanelPageHeader`, `PanelCard` (@/components/panel, index barrel).
   Panel sayfaları (2.F2–2.F5) bunları kullanır. Çıkış: `LogoutButton` @/components/auth.
+- Nav rol-görünürlük deseni (3.F1 çıktısı): `nav.ts`'te her öğe opsiyonel `minRole`
+  alır; `visibleNavFor(role)` role göre süzer (RANK: member<lead<admin). Admin/lead-only
+  sayfalar (başvurular minRole:lead — PII) böyle gizlenir. Yeni gizli sayfalar bunu kullanır.
 - Panel CRUD sayfa deseni (2.F2 çıktısı): server component `getBaseUrl()` ile
   `/api/panel/*` fetch → `role` + data'yı client `*Manager` bileşenine geçir →
   Manager POST/PATCH/DELETE + `router.refresh()`; yazma aksiyonları `canWrite`
@@ -270,3 +273,5 @@ oldukları için sırayla ilerler.
 - 2026-07-11 — Şef: 3.B1 done (panel applications API, admin+lead, status PATCH,
   içerik salt-okuma). ApplicationStatus: new→reviewing→accepted/rejected. 3.F1 açıldı
   (panel Başvurular). Push edildi.
+- 2026-07-11 — Şef: 3.F1 done (panel Başvurular, ApplicationsManager, nav minRole/
+  visibleNavFor rol-görünürlük deseni). 3.B2 açıldı (Inventory model+tip+API). Push edildi.
