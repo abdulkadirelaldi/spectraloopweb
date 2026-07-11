@@ -90,8 +90,8 @@ oldukları için sırayla ilerler.
 | 3.S1 | Güvenli dosya yükleme: tip/boyut authoritative validasyon (`@/lib/validation`) + key/isim sanitize + güvenlik denetimi + upload testleri | Güvenlik & QA | done | 3.B4 |
 | 3.F4 | Panel: doküman yükleme UI (R2) — "yakında" yerine gerçek upload | Frontend | done | 3.B4, 3.S1 |
 | 3.B5 | Panel API: sponsors CRUD (CMS — panelden yönet/yayınla) + RBAC | Backend | done | 2.S2 |
-| 3.F5 | Panel: Sponsor yönetimi (CMS bağı — panelden public'e yansır) | Frontend | in-progress | 3.B5 |
-| 3.Q0 | Faz 3 panel zod şemaları (inventory/expense/application-status) → `@/lib/validation` | Güvenlik & QA | todo | 3.B1–3.B5 |
+| 3.F5 | Panel: Sponsor yönetimi (CMS bağı — panelden public'e yansır) | Frontend | done | 3.B5 |
+| 3.Q0 | Faz 3 panel zod şemaları (inventory/expense/application-status/sponsor) → `@/lib/validation` | Güvenlik & QA | in-progress | 3.B1–3.B5 |
 | 3.B6 | Faz 3 zod şemalarını + upload validasyonunu route'lara bağla (TODO(3.Q)/TODO(3.S1)) | Backend | todo | 3.Q0, 3.S1 |
 | 3.Q1 | Faz 3 RBAC + upload entegrasyon/E2E testleri | Güvenlik & QA | todo | 3.F1–3.F5, 3.B6 |
 
@@ -297,3 +297,6 @@ oldukları için sırayla ilerler.
   build+test OK). **R2 kolu tamam.** 3.B5 açıldı (CMS — panel sponsors CRUD). Push edildi.
 - 2026-07-11 — Şef: 3.B5 done (panel sponsors CRUD, admin-only, active yayın toggle,
   on-demand revalidatePath ile public anında yansıma). 3.F5 açıldı (panel Sponsor yönetimi). Push edildi.
+- 2026-07-11 — Şef: 3.F5 done (panel Sponsor yönetimi, FileUpload logo, nav admin-only,
+  CMS active toggle). **TÜM FAZ 3 ÖZELLİK SAYFALARI TAMAM.** Kapanış: 3.Q0 açıldı
+  (panel zod: inventory/expense/application-status/sponsor). Push edildi.
