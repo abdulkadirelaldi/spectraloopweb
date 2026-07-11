@@ -19,25 +19,25 @@ test.describe("panel route protection", () => {
     await expect(page).toHaveURL(/\/giris\?callbackUrl=%2Fpanel%2Fgorevler$/);
   });
 
-  test("a session cookie passes the optimistic gate (no redirect)", async ({
+  test("a forged session cookie is still rejected (defense in depth)", async ({
     page,
     context,
     baseURL,
   }) => {
-    // Presence — not validity — is what the optimistic gate checks; a bogus
-    // value still passes here and would be rejected later by auth()/the API.
+    // The optimistic proxy gate only checks cookie PRESENCE, so a bogus cookie
+    // passes it — but the panel layout re-validates the session with auth()
+    // server-side and redirects an unverifiable one to sign-in. (The API layer
+    // independently returns 401 — see panel-api-auth.spec.ts.)
     await context.addCookies([
       {
         name: "authjs.session-token",
-        value: "optimistic-gate-not-validated-here",
+        value: "forged-not-a-valid-jwt",
         url: baseURL!,
       },
     ]);
 
     await page.goto("/panel");
-    // Stayed on /panel (not bounced to /giris). No page exists yet → 404, but
-    // the point is the gate did not redirect.
-    expect(new URL(page.url()).pathname).toBe("/panel");
+    await expect(page).toHaveURL(/\/giris(\?|$)/);
   });
 
   test("public routes are unaffected by the panel gate", async ({ page }) => {
