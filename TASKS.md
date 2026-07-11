@@ -80,8 +80,8 @@ oldukları için sırayla ilerler.
 
 | id | görev | agent | durum | bağımlılık |
 |----|-------|-------|-------|------------|
-| 3.B1 | Panel API: applications (başvuru) list/view/status güncelle + RBAC (admin/lead) — mevcut Application modeli | Backend | in-progress | 2.S2 |
-| 3.F1 | Panel: Başvurular sayfası (liste + durum güncelle) | Frontend | todo | 3.B1, 2.F1 |
+| 3.B1 | Panel API: applications (başvuru) list/view/status güncelle + RBAC (admin/lead) — mevcut Application modeli | Backend | done | 2.S2 |
+| 3.F1 | Panel: Başvurular sayfası (liste + durum güncelle) | Frontend | in-progress | 3.B1, 2.F1 |
 | 3.B2 | Inventory modeli + tip (src/types) + /api/panel/inventory CRUD + RBAC | Backend | todo | 2.S2 |
 | 3.F2 | Panel: Envanter sayfası | Frontend | todo | 3.B2 |
 | 3.B3 | Budget/Expense modeli + tip + /api/panel/budget CRUD + RBAC | Backend | todo | 2.S2 |
@@ -267,3 +267,6 @@ oldukları için sırayla ilerler.
   Karar bekliyor: (A) Vercel deploy mi, (B) Faz 3 (envanter/bütçe/başvuru + R2 + CMS) mi. Push edildi.
 - 2026-07-11 — Kullanıcı kararı: **Faz 3 (Gelişmiş Panel)**. Deploy ertelendi.
   Şef: Faz 3 planı eklendi (12 görev). 3.B1 açıldı (Backend — panel başvuru yönetimi). Push edildi.
+- 2026-07-11 — Şef: 3.B1 done (panel applications API, admin+lead, status PATCH,
+  içerik salt-okuma). ApplicationStatus: new→reviewing→accepted/rejected. 3.F1 açıldı
+  (panel Başvurular). Push edildi.
