@@ -44,22 +44,20 @@ export type AnnouncementAudience = "all" | "leads" | "admins";
  * Assumption (§8 only names the field `category`): coarse document buckets.
  */
 export type DocumentCategory =
-  | "cad"
-  | "report"
-  | "presentation"
-  | "media"
-  | "other";
+  "cad" | "report" | "presentation" | "media" | "other";
 
 /**
  * Calendar event type.
  * Assumption (§8 only names the field `type`): common event kinds.
  */
 export type EventType =
-  | "meeting"
-  | "deadline"
-  | "competition"
-  | "workshop"
-  | "other";
+  "meeting" | "deadline" | "competition" | "workshop" | "other";
+
+/**
+ * Inventory item status (Faz 3 — not in §8; added via chief approval, task 3.B2).
+ */
+export type InventoryStatus =
+  "available" | "in-use" | "maintenance" | "depleted";
 
 /**
  * Fields every persisted entity carries.

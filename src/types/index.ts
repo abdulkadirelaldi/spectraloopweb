@@ -22,3 +22,4 @@ export * from "./event";
 export * from "./sponsor";
 export * from "./application";
 export * from "./contact";
+export * from "./inventory";
