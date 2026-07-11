@@ -26,6 +26,9 @@ export { contactSchema, CONTACT_LIMITS, type ContactInput } from "./contact";
 // Panel input schemas (task 2.Q0) — bound by Backend in 2.B6.
 export * from "./panel";
 
+// Upload request validation + key hygiene (task 3.S1) — bound by Backend in 3.B6.
+export * from "./upload";
+
 /**
  * Returns the first validation issue's message — a human-safe string with no
  * internal details. Falls back to a generic message for an empty error.
