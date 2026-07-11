@@ -87,8 +87,8 @@ oldukları için sırayla ilerler.
 | 3.B3 | Budget/Expense modeli + tip + /api/panel/budget CRUD + RBAC | Backend | done | 2.S2 |
 | 3.F3 | Panel: Bütçe/harcama sayfası | Frontend | done | 3.B3 |
 | 3.B4 | R2 dosya yükleme: presigned URL API + entegrasyon (Cloudflare R2) | Backend | done | 2.S2 |
-| 3.S1 | Güvenli dosya yükleme: tip/boyut authoritative validasyon (`@/lib/validation`) + key/isim sanitize + güvenlik denetimi + upload testleri | Güvenlik & QA | in-progress | 3.B4 |
-| 3.F4 | Panel: doküman yükleme UI (R2) — "yakında" yerine gerçek upload | Frontend | todo | 3.B4, 3.S1 |
+| 3.S1 | Güvenli dosya yükleme: tip/boyut authoritative validasyon (`@/lib/validation`) + key/isim sanitize + güvenlik denetimi + upload testleri | Güvenlik & QA | done | 3.B4 |
+| 3.F4 | Panel: doküman yükleme UI (R2) — "yakında" yerine gerçek upload | Frontend | in-progress | 3.B4, 3.S1 |
 | 3.B5 | Panel API: sponsors CRUD (CMS — panelden yönet/yayınla) + RBAC | Backend | todo | 2.S2 |
 | 3.F5 | Panel: Sponsor yönetimi (CMS bağı — panelden public'e yansır) | Frontend | todo | 3.B5 |
 | 3.Q0 | Faz 3 panel zod şemaları (inventory/expense/application-status) → `@/lib/validation` | Güvenlik & QA | todo | 3.B1–3.B5 |
@@ -290,3 +290,6 @@ oldukları için sırayla ilerler.
 - 2026-07-11 — Şef: 3.B4 done (R2 presigned upload API, paylaşılan sabitler @/lib/utils/r2:
   UPLOAD_MAX_BYTES + UPLOAD_ALLOWED_CONTENT_TYPES, TODO(3.S1) kancaları, aws-sdk).
   Faz 3 zod batch'i eklendi (3.Q0 şema + 3.B6 bağlama). 3.S1 açıldı (upload güvenlik sertleştirme). Push edildi.
+- 2026-07-11 — Şef: 3.S1 done (upload validasyonu @/lib/validation: uploadRequestSchema +
+  sanitizeUploadFileName + buildUploadKey + maxBytesForContentType; 164 test yeşil).
+  Backend 3.B6 bunları bağlayacak. 3.F4 açıldı (panel upload UI). Push edildi.
