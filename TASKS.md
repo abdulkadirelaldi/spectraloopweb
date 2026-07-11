@@ -86,12 +86,14 @@ oldukları için sırayla ilerler.
 | 3.F2 | Panel: Envanter sayfası | Frontend | done | 3.B2 |
 | 3.B3 | Budget/Expense modeli + tip + /api/panel/budget CRUD + RBAC | Backend | done | 2.S2 |
 | 3.F3 | Panel: Bütçe/harcama sayfası | Frontend | done | 3.B3 |
-| 3.B4 | R2 dosya yükleme: presigned URL API + entegrasyon (Cloudflare R2) | Backend | in-progress | 2.S2 |
-| 3.S1 | Güvenli dosya yükleme: tip/boyut validasyonu + güvenlik denetimi + testler | Güvenlik & QA | todo | 3.B4 |
+| 3.B4 | R2 dosya yükleme: presigned URL API + entegrasyon (Cloudflare R2) | Backend | done | 2.S2 |
+| 3.S1 | Güvenli dosya yükleme: tip/boyut authoritative validasyon (`@/lib/validation`) + key/isim sanitize + güvenlik denetimi + upload testleri | Güvenlik & QA | in-progress | 3.B4 |
 | 3.F4 | Panel: doküman yükleme UI (R2) — "yakında" yerine gerçek upload | Frontend | todo | 3.B4, 3.S1 |
 | 3.B5 | Panel API: sponsors CRUD (CMS — panelden yönet/yayınla) + RBAC | Backend | todo | 2.S2 |
 | 3.F5 | Panel: Sponsor yönetimi (CMS bağı — panelden public'e yansır) | Frontend | todo | 3.B5 |
-| 3.Q1 | Faz 3 zod şemaları (inventory/budget/application-status) route'a bağlı + RBAC/upload testleri | Güvenlik & QA | todo | 3.B1–3.B5 |
+| 3.Q0 | Faz 3 panel zod şemaları (inventory/expense/application-status) → `@/lib/validation` | Güvenlik & QA | todo | 3.B1–3.B5 |
+| 3.B6 | Faz 3 zod şemalarını + upload validasyonunu route'lara bağla (TODO(3.Q)/TODO(3.S1)) | Backend | todo | 3.Q0, 3.S1 |
+| 3.Q1 | Faz 3 RBAC + upload entegrasyon/E2E testleri | Güvenlik & QA | todo | 3.F1–3.F5, 3.B6 |
 
 > Not: Faz 3 planı canlı; görevler ilerledikçe rafine edilebilir. Panel zod deseni
 > Faz 2'deki gibi (Backend ara-doğrulama + TODO(3.Q) → QA 3.Q1'de şema + bağlama).
@@ -285,3 +287,6 @@ oldukları için sırayla ilerler.
   reimbursed|rejected. 3.F3 açıldı (panel Bütçe). Push edildi.
 - 2026-07-11 — Şef: 3.F3 done (panel Bütçe, BudgetManager/ExpenseForm, finansal erişim
   geçidi, onay admin-only UI). R2 kolu başladı; 3.B4 açıldı (R2 presigned URL API). Push edildi.
+- 2026-07-11 — Şef: 3.B4 done (R2 presigned upload API, paylaşılan sabitler @/lib/utils/r2:
+  UPLOAD_MAX_BYTES + UPLOAD_ALLOWED_CONTENT_TYPES, TODO(3.S1) kancaları, aws-sdk).
+  Faz 3 zod batch'i eklendi (3.Q0 şema + 3.B6 bağlama). 3.S1 açıldı (upload güvenlik sertleştirme). Push edildi.
