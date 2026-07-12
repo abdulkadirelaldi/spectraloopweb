@@ -2,19 +2,25 @@ import type { NextConfig } from "next";
 
 const isDev = process.env.NODE_ENV === "development";
 
+// Cloudflare R2 S3 API endpoint (fixed domain). The browser PUTs uploads
+// directly to a presigned URL on this host (FileUpload → connect-src). Google
+// Fonts (Geist) are self-hosted by Next at build time, so font-src stays 'self'.
+const R2_UPLOAD_HOST = "https://*.r2.cloudflarestorage.com";
+
 // Content-Security-Policy — config-based (no nonce) so pages stay statically
 // renderable/CDN-cacheable. Next.js without nonces needs 'unsafe-inline' for its
 // bootstrap inline script/style; React dev tooling needs 'unsafe-eval' in dev only.
-// NOTE (Faz 1): widen `img-src`/`font-src`/`connect-src` when external assets land
-// (R2/CDN images, Google Fonts, analytics). See report for details.
 const csp = [
   `default-src 'self'`,
   `script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""}`,
   `style-src 'self' 'unsafe-inline'`,
-  `img-src 'self' blob: data:`,
+  // Sponsor/member/team logos & photos are arbitrary https URLs (R2 public base,
+  // external CDNs, placeholders). Images are inert, so `https:` is a safe widen.
+  `img-src 'self' blob: data: https:`,
   `font-src 'self'`,
-  // 'self' covers same-origin HMR; dev also needs the ws:// websocket explicitly.
-  `connect-src 'self'${isDev ? " ws: wss:" : ""}`,
+  // Same-origin APIs + the direct browser→R2 presigned PUT upload. Dev also needs
+  // the ws:// HMR websocket.
+  `connect-src 'self' ${R2_UPLOAD_HOST}${isDev ? " ws: wss:" : ""}`,
   `object-src 'none'`,
   `base-uri 'self'`,
   `form-action 'self'`,
