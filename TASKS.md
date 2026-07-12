@@ -91,8 +91,8 @@ oldukları için sırayla ilerler.
 | 3.F4 | Panel: doküman yükleme UI (R2) — "yakında" yerine gerçek upload | Frontend | done | 3.B4, 3.S1 |
 | 3.B5 | Panel API: sponsors CRUD (CMS — panelden yönet/yayınla) + RBAC | Backend | done | 2.S2 |
 | 3.F5 | Panel: Sponsor yönetimi (CMS bağı — panelden public'e yansır) | Frontend | done | 3.B5 |
-| 3.Q0 | Faz 3 panel zod şemaları (inventory/expense/application-status/sponsor) → `@/lib/validation` | Güvenlik & QA | in-progress | 3.B1–3.B5 |
-| 3.B6 | Faz 3 zod şemalarını + upload validasyonunu route'lara bağla (TODO(3.Q)/TODO(3.S1)) | Backend | todo | 3.Q0, 3.S1 |
+| 3.Q0 | Faz 3 panel zod şemaları (inventory/expense/application-status/sponsor) → `@/lib/validation` | Güvenlik & QA | done | 3.B1–3.B5 |
+| 3.B6 | Faz 3 zod şemalarını + upload validasyonunu route'lara bağla (TODO(3.Q)/TODO(3.S1)) | Backend | in-progress | 3.Q0, 3.S1 |
 | 3.Q1 | Faz 3 RBAC + upload entegrasyon/E2E testleri | Güvenlik & QA | todo | 3.F1–3.F5, 3.B6 |
 
 > Not: Faz 3 planı canlı; görevler ilerledikçe rafine edilebilir. Panel zod deseni
@@ -111,6 +111,11 @@ oldukları için sırayla ilerler.
 - **Panel zod export'ları (Backend 2.B6'ya — 2.Q0'dan):** `@/lib/validation`'dan
   `panel{Announcement,Task,Member,Document,Event}{Create,Update}Schema` (10 şema) +
   `firstErrorMessage`. 5 route'taki `TODO(2.Q)` ara-kontrolleri bunlarla değişecek.
+- **Faz 3 zod + upload export'ları (Backend 3.B6'ya — 3.Q0/3.S1'den):**
+  `@/lib/validation`'dan `panelInventory{Create,Update}Schema`, `panelExpense{Create,
+  Update}Schema`, `panelApplicationStatusSchema`, `panelSponsor{Create,Update}Schema`
+  + upload: `uploadRequestSchema`, `sanitizeUploadFileName`, `buildUploadKey`,
+  `maxBytesForContentType`. TODO(3.Q)/TODO(3.S1) kancaları bunlarla değişecek.
 - ✅ ÇÖZÜLDÜ (1.Q1): `MAIL_FROM` + `TEAM_NOTIFY_EMAIL` .env.example'a eklendi.
 - **API guard (Backend 2.B2–2.B5'e — 2.S2'den):** `@/lib/auth/guard`'dan
   `requireApiSession()`, `requireApiRole(allowed: Role|Role[])`, `requireApiMinRole(min: Role)`.
@@ -300,3 +305,5 @@ oldukları için sırayla ilerler.
 - 2026-07-11 — Şef: 3.F5 done (panel Sponsor yönetimi, FileUpload logo, nav admin-only,
   CMS active toggle). **TÜM FAZ 3 ÖZELLİK SAYFALARI TAMAM.** Kapanış: 3.Q0 açıldı
   (panel zod: inventory/expense/application-status/sponsor). Push edildi.
+- 2026-07-11 — Şef: 3.Q0 done (7 Faz 3 panel şeması @/lib/validation, 184 test yeşil).
+  3.B6 açıldı (Backend — Faz 3 zod + upload validasyonu route'lara bağla). Push edildi.
