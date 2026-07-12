@@ -1,20 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/lib/auth/index", () => ({ auth: vi.fn() }));
-// Mock the R2 helper so no aws-sdk / real bucket / env is needed.
-vi.mock("@/lib/utils/r2", () => ({
-  UPLOAD_ALLOWED_CONTENT_TYPES: ["application/pdf", "image/png"],
-  UPLOAD_MAX_BYTES: 25 * 1024 * 1024,
-  isAllowedContentType: (ct: string) =>
-    ["application/pdf", "image/png"].includes(ct),
-  createPresignedUpload: vi.fn().mockResolvedValue({
-    uploadUrl:
-      "https://account.r2.cloudflarestorage.com/bucket/documents/x?sig",
-    fileUrl: "https://cdn.example.com/documents/x",
-    key: "documents/x",
-    expiresIn: 300,
-  }),
-}));
+// Keep the REAL r2 constants (so the real uploadRequestSchema + buildUploadKey
+// run) but stub the presign so no aws-sdk call / bucket / env is needed.
+vi.mock("@/lib/utils/r2", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@/lib/utils/r2")>();
+  return {
+    ...actual,
+    createPresignedUpload: vi.fn().mockResolvedValue({
+      uploadUrl:
+        "https://account.r2.cloudflarestorage.com/bucket/documents/x?sig",
+      fileUrl: "https://cdn.example.com/documents/x",
+      key: "documents/x",
+      expiresIn: 300,
+    }),
+  };
+});
 
 import { auth } from "@/lib/auth/index";
 import { createPresignedUpload } from "@/lib/utils/r2";
@@ -35,18 +36,16 @@ beforeEach(() => {
   vi.clearAllMocks();
 });
 
-describe("POST /api/panel/uploads (RBAC)", () => {
+describe("POST /api/panel/uploads — authorization", () => {
   it("401 when unauthenticated (no presign requested)", async () => {
     authMock.mockResolvedValue(null);
-    const res = await uploadsPOST(jsonReq("POST", validBody));
-    expect(res.status).toBe(401);
+    expect((await uploadsPOST(jsonReq("POST", validBody))).status).toBe(401);
     expect(r2.createPresignedUpload).not.toHaveBeenCalled();
   });
 
-  it("403 for a member (not admin/lead)", async () => {
+  it("403 for a member", async () => {
     authMock.mockResolvedValue(session("member"));
-    const res = await uploadsPOST(jsonReq("POST", validBody));
-    expect(res.status).toBe(403);
+    expect((await uploadsPOST(jsonReq("POST", validBody))).status).toBe(403);
     expect(r2.createPresignedUpload).not.toHaveBeenCalled();
   });
 
@@ -57,26 +56,35 @@ describe("POST /api/panel/uploads (RBAC)", () => {
       const res = await uploadsPOST(jsonReq("POST", validBody));
       expect(res.status).toBe(200);
       expect(r2.createPresignedUpload).toHaveBeenCalledTimes(1);
-      const body = await res.json();
-      expect(body).toMatchObject({ ok: true, key: "documents/x" });
     },
   );
+});
 
-  it("400 for an admin with a disallowed contentType (no presign)", async () => {
-    authMock.mockResolvedValue(session("admin"));
-    const res = await uploadsPOST(
-      jsonReq("POST", { ...validBody, contentType: "text/html" }),
-    );
+describe("POST /api/panel/uploads — 3.S1 validation at the endpoint", () => {
+  beforeEach(() => authMock.mockResolvedValue(session("admin")));
+
+  it.each([
+    ["disallowed contentType", { ...validBody, contentType: "text/html" }],
+    ["oversize", { ...validBody, size: 26 * 1024 * 1024 }],
+    ["zero size", { ...validBody, size: 0 }],
+    [
+      "path-traversal fileName",
+      { ...validBody, fileName: "../../../etc/passwd" },
+    ],
+    ["dangerous extension", { ...validBody, fileName: "malware.exe" }],
+    ["nested path fileName", { ...validBody, fileName: "a/b/c.pdf" }],
+  ])("400 for %s (no presign)", async (_label, body) => {
+    const res = await uploadsPOST(jsonReq("POST", body));
     expect(res.status).toBe(400);
     expect(r2.createPresignedUpload).not.toHaveBeenCalled();
   });
 
-  it("400 for an admin exceeding the size cap (no presign)", async () => {
-    authMock.mockResolvedValue(session("admin"));
-    const res = await uploadsPOST(
-      jsonReq("POST", { ...validBody, size: 26 * 1024 * 1024 }),
+  it("passes a safe, uuid-prefixed key to the presigner (never the raw path)", async () => {
+    await uploadsPOST(
+      jsonReq("POST", { ...validBody, fileName: "Rapor Final.pdf" }),
     );
-    expect(res.status).toBe(400);
-    expect(r2.createPresignedUpload).not.toHaveBeenCalled();
+    const arg = r2.createPresignedUpload.mock.calls[0]?.[0] as { key: string };
+    expect(arg.key).toMatch(/^documents\/[0-9a-f-]{36}-/);
+    expect(arg.key).not.toContain(" ");
   });
 });

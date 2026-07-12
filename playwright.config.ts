@@ -1,6 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const PORT = 3000;
+// Honour PORT so the suite can run on a free port when 3000 is occupied
+// (defaults to 3000 for CI / normal local runs). `next dev`/`start` read PORT too.
+const PORT = Number(process.env.PORT) || 3000;
 const baseURL = `http://localhost:${PORT}`;
 
 // E2E runner. Boots the app and drives it in a real (headless) browser.
