@@ -92,8 +92,8 @@ oldukları için sırayla ilerler.
 | 3.B5 | Panel API: sponsors CRUD (CMS — panelden yönet/yayınla) + RBAC | Backend | done | 2.S2 |
 | 3.F5 | Panel: Sponsor yönetimi (CMS bağı — panelden public'e yansır) | Frontend | done | 3.B5 |
 | 3.Q0 | Faz 3 panel zod şemaları (inventory/expense/application-status/sponsor) → `@/lib/validation` | Güvenlik & QA | done | 3.B1–3.B5 |
-| 3.B6 | Faz 3 zod şemalarını + upload validasyonunu route'lara bağla (TODO(3.Q)/TODO(3.S1)) | Backend | in-progress | 3.Q0, 3.S1 |
-| 3.Q1 | Faz 3 RBAC + upload entegrasyon/E2E testleri | Güvenlik & QA | todo | 3.F1–3.F5, 3.B6 |
+| 3.B6 | Faz 3 zod şemalarını + upload validasyonunu route'lara bağla (TODO(3.Q)/TODO(3.S1)) | Backend | done | 3.Q0, 3.S1 |
+| 3.Q1 | Faz 3 RBAC + upload entegrasyon/E2E testleri | Güvenlik & QA | in-progress | 3.F1–3.F5, 3.B6 |
 
 > Not: Faz 3 planı canlı; görevler ilerledikçe rafine edilebilir. Panel zod deseni
 > Faz 2'deki gibi (Backend ara-doğrulama + TODO(3.Q) → QA 3.Q1'de şema + bağlama).
@@ -307,3 +307,6 @@ oldukları için sırayla ilerler.
   (panel zod: inventory/expense/application-status/sponsor). Push edildi.
 - 2026-07-11 — Şef: 3.Q0 done (7 Faz 3 panel şeması @/lib/validation, 184 test yeşil).
   3.B6 açıldı (Backend — Faz 3 zod + upload validasyonu route'lara bağla). Push edildi.
+- 2026-07-11 — Şef: 3.B6 done (Faz 3 panel route'ları + uploads route zod/validasyona
+  bağlandı, TODO temiz, RBAC/response korundu). Son Faz 3 görevi 3.Q1 açıldı
+  (Faz 3 RBAC + upload testleri). Push edildi.
