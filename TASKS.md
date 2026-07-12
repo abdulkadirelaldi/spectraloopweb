@@ -4,7 +4,19 @@
 > Durum değerleri: `todo` · `in-progress` · `blocked` · `review` · `done`
 > Kural: aynı anda tek worker meşgul. Bir görev `done` olup commit'lenince şef sıradakini açar.
 
-## Aktif Faz: — (Faz 0 ✅ · Faz 1 ✅ · Faz 2 ✅ · Faz 3 ✅ — sıradaki: deploy? / Faz 4 sertleştirme)
+## Aktif Faz: Faz D — Vercel Deploy (Faz 0–3 ✅)
+
+> Kullanıcı kararı (2026-07-11): Vercel deploy. İki kol: (a) KULLANICI manuel
+> provisioning (hesaplar+secret'lar — agent yapamaz), (b) agent kodu son-hazır yapar.
+> Auth.js `trustHost: true` zaten ayarlı; vercel.json gerekmez (Next.js otomatik).
+
+| id | görev | agent | durum | bağımlılık |
+|----|-------|-------|-------|------------|
+| D1 | Deploy hazırlık: `docs/DEPLOY.md` (env + adım checklist) + .env.example tamlık denetimi + prod Auth/CSP/headers doğrulama + prod build kontrolü | Güvenlik & QA | in-progress | 3.Q1 |
+| D0 | **KULLANICI (manuel):** MongoDB Atlas URI · Resend API key + doğrulanmış gönderen · Cloudflare R2 (bucket+creds+public URL) · AUTH_SECRET üret · Vercel proje + GitHub bağla · tüm env'leri Vercel'e gir · admin seed çalıştır | Yusuf | todo | D1 |
+| D2 | Deploy sonrası smoke doğrulama (public sayfalar + giriş + panel + form + upload) + varsa prod hata düzeltme | Güvenlik & QA | todo | D0 |
+
+
 
 ### Faz 0 — Kurulum (TAMAMLANDI ✅)
 
@@ -316,3 +328,6 @@ oldukları için sırayla ilerler.
   gelen sahte "33 failed" temiz izole koşuyla çürütüldü — regresyon yok.)
   **🎉 FAZ 3 (GELİŞMİŞ PANEL + CMS) TAMAMLANDI.** Karar bekliyor: (A) Vercel deploy
   mi, (B) Faz 4 (sertleştirme) mi. Push edildi.
+- 2026-07-11 — Kullanıcı kararı: **Vercel deploy.** Şef: Faz D eklendi. Kod büyük
+  ölçüde hazır (trustHost:true, R2_PUBLIC_BASE_URL var, vercel.json gereksiz).
+  D1 açıldı (Güvenlik & QA — deploy hazırlık + DEPLOY.md). Push edildi.
