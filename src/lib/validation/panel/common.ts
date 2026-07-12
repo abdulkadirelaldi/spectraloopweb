@@ -2,9 +2,13 @@ import { z } from "zod";
 
 import type {
   AnnouncementAudience,
+  ApplicationStatus,
   DocumentCategory,
   EventType,
+  ExpenseStatus,
+  InventoryStatus,
   Role,
+  SponsorTier,
   TaskStatus,
 } from "@/types";
 
@@ -64,6 +68,35 @@ export const EVENT_TYPES = [
   "workshop",
   "other",
 ] as const satisfies readonly EventType[];
+
+// --- Phase 3 enum lists (task 3.Q0) ---
+
+export const INVENTORY_STATUSES = [
+  "available",
+  "in-use",
+  "maintenance",
+  "depleted",
+] as const satisfies readonly InventoryStatus[];
+
+export const EXPENSE_STATUSES = [
+  "pending",
+  "approved",
+  "reimbursed",
+  "rejected",
+] as const satisfies readonly ExpenseStatus[];
+
+export const APPLICATION_STATUSES = [
+  "new",
+  "reviewing",
+  "accepted",
+  "rejected",
+] as const satisfies readonly ApplicationStatus[];
+
+export const SPONSOR_TIERS = [
+  "gold",
+  "silver",
+  "bronze",
+] as const satisfies readonly SponsorTier[];
 
 export const UPDATE_EMPTY_MESSAGE = "No updatable fields provided.";
 
@@ -126,3 +159,12 @@ export const emailField = () =>
     .email({ message: "Invalid email address." })
     .max(254, "Email is too long.")
     .transform((v) => v.toLowerCase());
+
+/** A required http(s) URL within `max` chars (matches the hand-rolled checkUrl). */
+export const httpUrl = (max: number, label: string) =>
+  z
+    .url({
+      protocol: /^https?$/,
+      message: `${label} must be a valid http(s) URL.`,
+    })
+    .max(max, `${label} is too long.`);

@@ -41,6 +41,30 @@ export {
   type PanelEventUpdate,
 } from "./event";
 
+// --- Phase 3 schemas (task 3.Q0) — bound by Backend in 3.B6. ---
+export {
+  panelInventoryCreateSchema,
+  panelInventoryUpdateSchema,
+  type PanelInventoryCreate,
+  type PanelInventoryUpdate,
+} from "./inventory";
+export {
+  panelExpenseCreateSchema,
+  panelExpenseUpdateSchema,
+  type PanelExpenseCreate,
+  type PanelExpenseUpdate,
+} from "./expense";
+export {
+  panelApplicationStatusSchema,
+  type PanelApplicationStatus,
+} from "./application";
+export {
+  panelSponsorCreateSchema,
+  panelSponsorUpdateSchema,
+  type PanelSponsorCreate,
+  type PanelSponsorUpdate,
+} from "./sponsor";
+
 // Enum value lists (kept in sync with @/types), handy for tests / route filters.
 export {
   AUDIENCES,
@@ -48,4 +72,8 @@ export {
   ROLES,
   DOCUMENT_CATEGORIES,
   EVENT_TYPES,
+  INVENTORY_STATUSES,
+  EXPENSE_STATUSES,
+  APPLICATION_STATUSES,
+  SPONSOR_TIERS,
 } from "./common";
