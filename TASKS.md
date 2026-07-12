@@ -4,7 +4,7 @@
 > Durum değerleri: `todo` · `in-progress` · `blocked` · `review` · `done`
 > Kural: aynı anda tek worker meşgul. Bir görev `done` olup commit'lenince şef sıradakini açar.
 
-## Aktif Faz: Faz 3 — Gelişmiş Panel + CMS (Faz 0 ✅ · Faz 1 ✅ · Faz 2 ✅)
+## Aktif Faz: — (Faz 0 ✅ · Faz 1 ✅ · Faz 2 ✅ · Faz 3 ✅ — sıradaki: deploy? / Faz 4 sertleştirme)
 
 ### Faz 0 — Kurulum (TAMAMLANDI ✅)
 
@@ -71,7 +71,7 @@ oldukları için sırayla ilerler.
 > Not: Faz 2 planı canlı — görevler ilerledikçe (özellikle panel API/UI) bölünüp
 > rafine edilebilir. R2 dosya yükleme karmaşıksa Faz 3'e kaydırılabilir.
 
-## Faz 3 — Gelişmiş Panel + CMS Bağı (AKTİF)
+## Faz 3 — Gelişmiş Panel + CMS Bağı (TAMAMLANDI ✅)
 
 > Kapsam (PROGRAM §10): başvuru yönetimi, envanter, bütçe, R2 dosya yükleme,
 > CMS bağı (panelden public yayın). Backend-sözleşme-önce sırası korunur.
@@ -93,7 +93,7 @@ oldukları için sırayla ilerler.
 | 3.F5 | Panel: Sponsor yönetimi (CMS bağı — panelden public'e yansır) | Frontend | done | 3.B5 |
 | 3.Q0 | Faz 3 panel zod şemaları (inventory/expense/application-status/sponsor) → `@/lib/validation` | Güvenlik & QA | done | 3.B1–3.B5 |
 | 3.B6 | Faz 3 zod şemalarını + upload validasyonunu route'lara bağla (TODO(3.Q)/TODO(3.S1)) | Backend | done | 3.Q0, 3.S1 |
-| 3.Q1 | Faz 3 RBAC + upload entegrasyon/E2E testleri | Güvenlik & QA | in-progress | 3.F1–3.F5, 3.B6 |
+| 3.Q1 | Faz 3 RBAC + upload entegrasyon/E2E testleri | Güvenlik & QA | done | 3.F1–3.F5, 3.B6 |
 
 > Not: Faz 3 planı canlı; görevler ilerledikçe rafine edilebilir. Panel zod deseni
 > Faz 2'deki gibi (Backend ara-doğrulama + TODO(3.Q) → QA 3.Q1'de şema + bağlama).
@@ -310,3 +310,9 @@ oldukları için sırayla ilerler.
 - 2026-07-11 — Şef: 3.B6 done (Faz 3 panel route'ları + uploads route zod/validasyona
   bağlandı, TODO temiz, RBAC/response korundu). Son Faz 3 görevi 3.Q1 açıldı
   (Faz 3 RBAC + upload testleri). Push edildi.
+- 2026-07-11 — Şef: 3.Q1 done (Faz 3 RBAC entegrasyon testleri: applications/inventory/
+  budget/sponsors/uploads + public-sponsors-leak). Temiz CI koşusu: 224 unit/entegrasyon
+  + 34 E2E yeşil, build temiz. (Not: ara doğrulamada eşzamanlı e2e port çakışmasından
+  gelen sahte "33 failed" temiz izole koşuyla çürütüldü — regresyon yok.)
+  **🎉 FAZ 3 (GELİŞMİŞ PANEL + CMS) TAMAMLANDI.** Karar bekliyor: (A) Vercel deploy
+  mi, (B) Faz 4 (sertleştirme) mi. Push edildi.
