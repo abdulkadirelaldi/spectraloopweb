@@ -1,7 +1,12 @@
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole, requireApiSession } from "@/lib/auth/guard";
 import { Inventory, type InventoryDocument } from "@/models/Inventory";
-import { INVENTORY_STATUSES, toInventory, validateCreate } from "./shared";
+import { toInventory } from "./shared";
+import {
+  panelInventoryCreateSchema,
+  firstErrorMessage,
+  INVENTORY_STATUSES,
+} from "@/lib/validation";
 
 /**
  * Panel inventory collection — /api/panel/inventory
@@ -79,9 +84,12 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
-  const parsed = validateCreate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelInventoryCreateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
 
   const { role, subteam: ownSubteam } = gate.session.user;

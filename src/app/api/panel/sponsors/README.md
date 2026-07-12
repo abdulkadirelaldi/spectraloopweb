@@ -110,9 +110,10 @@ Set `{ "active": true|false }` to publish/unpublish.
 
 ## Open items
 
-- **Validation is interim (hand-rolled)** in `shared.ts`, marked `TODO(3.Q)` —
-  needs a panel-sponsor zod schema from Security & QA (`@/lib/validation`, 3.Q0),
-  bound like the other panel schemas (cf. 2.B6).
+- **Validation is authoritative (zod).** The body is validated by
+  `panelSponsorCreateSchema` / `panelSponsorUpdateSchema` from `@/lib/validation`
+  (Security & QA, 3.Q0), bound in 3.B6. Shape only; the admin-only publish
+  (`active`) authority stays in the route/guard.
 - **Response summary (for Frontend 3.F5):** success → `{ ok:true, ... }` with
   `sponsors` (list) / `sponsor` (single) / `id` (delete); failure →
   `{ ok:false, error }`.

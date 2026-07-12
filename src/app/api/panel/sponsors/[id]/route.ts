@@ -4,7 +4,8 @@ import mongoose from "mongoose";
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole, requireApiSession } from "@/lib/auth/guard";
 import { Sponsor, type SponsorDocument } from "@/models/Sponsor";
-import { toSponsor, validateUpdate } from "../shared";
+import { toSponsor } from "../shared";
+import { panelSponsorUpdateSchema, firstErrorMessage } from "@/lib/validation";
 
 /**
  * Single panel sponsor — /api/panel/sponsors/[id] (CMS)
@@ -83,9 +84,12 @@ export async function PATCH(request: Request, ctx: Ctx): Promise<Response> {
     );
   }
 
-  const parsed = validateUpdate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelSponsorUpdateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
 
   try {

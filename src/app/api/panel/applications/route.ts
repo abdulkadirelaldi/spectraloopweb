@@ -1,7 +1,8 @@
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole } from "@/lib/auth/guard";
 import { Application, type ApplicationDocument } from "@/models/Application";
-import { APPLICATION_STATUSES, toApplication } from "./shared";
+import { toApplication } from "./shared";
+import { APPLICATION_STATUSES } from "@/lib/validation";
 
 /**
  * Panel applications collection — /api/panel/applications

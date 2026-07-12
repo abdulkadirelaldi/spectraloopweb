@@ -3,7 +3,11 @@ import mongoose from "mongoose";
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole } from "@/lib/auth/guard";
 import { Application, type ApplicationDocument } from "@/models/Application";
-import { toApplication, validateStatusUpdate } from "../shared";
+import { toApplication } from "../shared";
+import {
+  panelApplicationStatusSchema,
+  firstErrorMessage,
+} from "@/lib/validation";
 
 /**
  * Single panel application — /api/panel/applications/[id]
@@ -73,9 +77,12 @@ export async function PATCH(request: Request, ctx: Ctx): Promise<Response> {
     );
   }
 
-  const parsed = validateStatusUpdate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelApplicationStatusSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
 
   try {

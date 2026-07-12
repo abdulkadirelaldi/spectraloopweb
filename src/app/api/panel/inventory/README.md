@@ -116,8 +116,9 @@ Body: subset of `name`, `category`, `quantity`, `unit`, `status`, `location`,
 
 ## Open items
 
-- **Validation is interim (hand-rolled)** in `shared.ts`, marked `TODO(3.Q)` —
-  needs a panel-inventory zod schema from Security & QA (`@/lib/validation`,
-  task 3.Q1), bound like the other panel schemas (cf. 2.B6).
+- **Validation is authoritative (zod).** The body is validated by
+  `panelInventoryCreateSchema` / `panelInventoryUpdateSchema` from
+  `@/lib/validation` (Security & QA, 3.Q0), bound in 3.B6. Shape only; subteam
+  scoping / IDOR stay in the route/guard.
 - **Response summary (for Frontend 3.F2):** success → `{ ok:true, ... }` with
   `items` (list) / `item` (single) / `id` (delete); failure → `{ ok:false, error }`.

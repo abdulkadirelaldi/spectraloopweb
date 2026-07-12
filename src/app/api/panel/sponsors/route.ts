@@ -3,7 +3,12 @@ import { revalidatePath } from "next/cache";
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole, requireApiSession } from "@/lib/auth/guard";
 import { Sponsor, type SponsorDocument } from "@/models/Sponsor";
-import { SPONSOR_TIERS, toSponsor, validateCreate } from "./shared";
+import { toSponsor } from "./shared";
+import {
+  panelSponsorCreateSchema,
+  firstErrorMessage,
+  SPONSOR_TIERS,
+} from "@/lib/validation";
 
 /**
  * Panel sponsors collection — /api/panel/sponsors (CMS)
@@ -81,9 +86,12 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
-  const parsed = validateCreate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelSponsorCreateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
 
   try {

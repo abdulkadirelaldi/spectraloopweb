@@ -1,6 +1,5 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { randomUUID } from "node:crypto";
 
 /**
  * Cloudflare R2 (S3-compatible) storage helper — presigned upload URLs.
@@ -17,11 +16,12 @@ import { randomUUID } from "node:crypto";
  */
 
 /* -------------------------------------------------------------------------- */
-/* Upload constraints — BASELINE only.                                         */
-/* TODO(3.S1): Security & QA hardens these (tighter allow-list, per-type size  */
-/* caps, magic-byte sniffing, and ideally a presigned POST with                */
-/* content-length-range for a HARD server-enforced size cap). These constants  */
-/* are exported so QA / validation can share the exact same source of truth.   */
+/* Upload constraints — the shared source of truth.                            */
+/* Security & QA's authoritative upload validation (`@/lib/validation`, 3.S1)   */
+/* IMPORTS these constants (allow-list, size cap, key prefix), so both the      */
+/* schema and this R2 client agree. Per-type size caps + strict fileName rules  */
+/* live in the schema; the presigned-POST/content-length-range recommendation   */
+/* is tracked in the 3.S1 audit.                                                */
 /* -------------------------------------------------------------------------- */
 
 /** Allowed upload MIME types (baseline). */
@@ -49,10 +49,6 @@ export const UPLOAD_URL_TTL_SECONDS = 300; // 5 minutes
 
 /** Key prefix under which document objects are stored. */
 export const UPLOAD_KEY_PREFIX = "documents";
-
-export function isAllowedContentType(ct: string): ct is UploadContentType {
-  return (UPLOAD_ALLOWED_CONTENT_TYPES as readonly string[]).includes(ct);
-}
 
 /* -------------------------------------------------------------------------- */
 /* R2 client (cached).                                                         */
@@ -111,29 +107,12 @@ function getR2Client(env: R2Env): S3Client {
 }
 
 /* -------------------------------------------------------------------------- */
-/* Key building + presigning.                                                  */
+/* Presigning.                                                                 */
 /* -------------------------------------------------------------------------- */
-
-/**
- * Sanitize a client-supplied file name: strip any path components (path-traversal
- * defence), collapse unsafe characters, and cap length. Never trusts the input.
- */
-export function sanitizeFileName(name: string): string {
-  // Drop any directory portion (handles "../", "a/b", "C:\x", etc.).
-  const base = name.split(/[\\/]/).pop() ?? "file";
-  const cleaned = base
-    .normalize("NFKD")
-    .replace(/[^a-zA-Z0-9._-]/g, "-") // safe charset only
-    .replace(/-+/g, "-")
-    .replace(/^[.-]+/, "") // no leading dot/dash (hidden files / odd names)
-    .slice(0, 100);
-  return cleaned.length > 0 ? cleaned : "file";
-}
-
-/** Build a collision-resistant object key: `documents/<uuid>-<safeName>`. */
-export function buildObjectKey(fileName: string): string {
-  return `${UPLOAD_KEY_PREFIX}/${randomUUID()}-${sanitizeFileName(fileName)}`;
-}
+/* NOTE: file-name sanitisation + object-key building are OWNED by Security &  */
+/* QA in `@/lib/validation` (`sanitizeUploadFileName` / `buildUploadKey`, task  */
+/* 3.S1) — the authoritative source. The uploads route builds the key there    */
+/* and passes it to `createPresignedUpload` below.                             */
 
 /** Build the public `fileUrl` for a stored object key. */
 export function publicFileUrl(key: string): string {
@@ -153,25 +132,25 @@ export interface PresignedUpload {
 }
 
 /**
- * Create a presigned PUT URL for uploading one object to R2.
+ * Create a presigned PUT URL for uploading one object to R2, under the given
+ * pre-built `key` (produced by `buildUploadKey` from `@/lib/validation`).
  *
  * The `ContentType` is baked into the signature, so the client MUST send the
  * same `Content-Type` header on its PUT. NOTE: a presigned PUT cannot hard-cap
- * the uploaded byte size — the declared size is validated server-side before
- * issuing the URL, but a true server-enforced cap needs a presigned POST with
- * `content-length-range` (TODO(3.S1)).
+ * the uploaded byte size — the declared size is validated by the upload schema
+ * before issuing the URL, but a true server-enforced cap needs a presigned POST
+ * with `content-length-range` (see the 3.S1 audit).
  */
 export async function createPresignedUpload(params: {
-  fileName: string;
+  key: string;
   contentType: UploadContentType;
 }): Promise<PresignedUpload> {
   const env = readEnv();
   const client = getR2Client(env);
-  const key = buildObjectKey(params.fileName);
 
   const command = new PutObjectCommand({
     Bucket: env.bucket,
-    Key: key,
+    Key: params.key,
     ContentType: params.contentType,
   });
 
@@ -181,8 +160,8 @@ export async function createPresignedUpload(params: {
 
   return {
     uploadUrl,
-    fileUrl: publicFileUrl(key),
-    key,
+    fileUrl: publicFileUrl(params.key),
+    key: params.key,
     expiresIn: UPLOAD_URL_TTL_SECONDS,
   };
 }

@@ -76,36 +76,44 @@ Body:
 
 ---
 
-## Security constants — shared source (for QA 3.S1)
+## Validation & security (authoritative — Security & QA, 3.S1)
 
-Baseline limits live in **`@/lib/utils/r2`** as exported constants so QA /
-validation share one source of truth:
+The request body is validated by **`uploadRequestSchema`** from
+`@/lib/validation` (bound in 3.B6); the storage key is built by
+**`buildUploadKey`** (which applies `sanitizeUploadFileName`). The shared limit
+constants live in **`@/lib/utils/r2`** and are imported by the schema — one
+source of truth, no drift:
 
-| Constant                       | Baseline value                                           |
+| Constant                       | Value                                                    |
 | ------------------------------ | -------------------------------------------------------- |
 | `UPLOAD_ALLOWED_CONTENT_TYPES` | pdf, png/jpeg/webp, zip, msword/docx, xls/xlsx, ppt/pptx |
-| `UPLOAD_MAX_BYTES`             | `25 * 1024 * 1024` (25 MB)                               |
+| `UPLOAD_MAX_BYTES`             | `25 * 1024 * 1024` (25 MB) global cap                    |
 | `UPLOAD_URL_TTL_SECONDS`       | `300`                                                    |
 | `UPLOAD_KEY_PREFIX`            | `"documents"`                                            |
 
-`isAllowedContentType(ct)` is the shared allow-list check.
+What the schema enforces:
 
-### `TODO(3.S1)` — Security & QA hardening
+- **contentType** ∈ the allow-list (`z.enum`).
+- **size** is a positive integer within the global cap **and** a
+  `maxBytesForContentType` per-type cap (images capped at 10 MB).
+- **fileName** rejected if it contains path separators / control chars /
+  traversal (`.`/`..`) / leading dot / a dangerous or double extension (e.g.
+  `.php.pdf`, `.exe`, `.svg`).
 
-- **Hard size cap:** a presigned **PUT** cannot enforce a max byte size (only the
-  _declared_ `size` is validated here). For a server-enforced cap, switch to a
-  presigned **POST** with a `content-length-range` policy.
-- Tighten the allow-list, add per-type size caps, and consider **magic-byte
-  sniffing** (content-type header is client-declared and spoofable).
-- Optionally scan objects post-upload.
+### Key hygiene
 
-### Key sanitization
+- The object key is `documents/<uuid>-<sanitizedName>` — `<uuid>` makes it
+  collision-resistant **and unguessable** (blocks URL enumeration/IDOR).
+- `sanitizeUploadFileName` strips any directory portion (path-traversal defence),
+  reduces to `[a-zA-Z0-9._-]`, and caps length. The client name never dictates
+  the storage path.
 
-- The object key is `documents/<uuid>-<sanitizedName>` — `<uuid>` from
-  `crypto.randomUUID()`.
-- `fileName` is sanitized (`sanitizeFileName`): path components stripped
-  (path-traversal defence), reduced to `[a-zA-Z0-9._-]`, length-capped. The
-  client name never dictates the storage path.
+### Residual note (see 3.S1 audit)
+
+A presigned **PUT** cannot hard-cap the uploaded byte size — only the _declared_
+`size` is validated. A true server-enforced cap needs a presigned **POST** with a
+`content-length-range` policy; tracked in the 3.S1 audit along with the
+content-type-spoofing / bucket-exposure findings.
 
 ---
 

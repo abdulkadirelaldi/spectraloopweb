@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole } from "@/lib/auth/guard";
 import { Expense, type ExpenseDocument } from "@/models/Expense";
-import { toExpense, validateUpdate } from "../shared";
+import { toExpense } from "../shared";
+import { panelExpenseUpdateSchema, firstErrorMessage } from "@/lib/validation";
 
 /**
  * Single panel expense — /api/panel/budget/[id]
@@ -87,9 +88,12 @@ export async function PATCH(request: Request, ctx: Ctx): Promise<Response> {
     );
   }
 
-  const parsed = validateUpdate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelExpenseUpdateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
   const patch = parsed.data;
 

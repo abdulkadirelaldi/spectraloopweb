@@ -1,12 +1,12 @@
 import { connectToDatabase } from "@/lib/db/connect";
 import { requireApiRole } from "@/lib/auth/guard";
 import { Expense, type ExpenseDocument } from "@/models/Expense";
+import { computeSummary, toExpense } from "./shared";
 import {
+  panelExpenseCreateSchema,
+  firstErrorMessage,
   EXPENSE_STATUSES,
-  computeSummary,
-  toExpense,
-  validateCreate,
-} from "./shared";
+} from "@/lib/validation";
 
 /**
  * Panel budget/expenses collection — /api/panel/budget
@@ -119,9 +119,12 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
-  const parsed = validateCreate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = panelExpenseCreateSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
 
   const { role, subteam: ownSubteam } = gate.session.user;

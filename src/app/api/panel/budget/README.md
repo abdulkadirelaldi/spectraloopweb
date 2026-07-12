@@ -146,9 +146,10 @@ Body: subset of `title`, `amount`, `currency`, `category`, `date`, `subteam`,
 
 ## Open items
 
-- **Validation is interim (hand-rolled)** in `shared.ts`, marked `TODO(3.Q)` —
-  needs a panel-expense zod schema from Security & QA (`@/lib/validation`, 3.Q1),
-  bound like the other panel schemas (cf. 2.B6).
+- **Validation is authoritative (zod).** The body is validated by
+  `panelExpenseCreateSchema` / `panelExpenseUpdateSchema` from `@/lib/validation`
+  (Security & QA, 3.Q0), bound in 3.B6. Shape only; the approval transition
+  (admin-only), subteam scoping, and IDOR stay in the route/guard.
 - **Response summary (for Frontend 3.F3):** success → `{ ok:true, ... }` with
   `expenses` + `summary` (list) / `expense` (single) / `id` (delete); failure →
   `{ ok:false, error }`.

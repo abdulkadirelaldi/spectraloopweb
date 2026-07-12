@@ -103,10 +103,10 @@ Consistent `{ ok:false, error }` shape:
 
 ## Open items
 
-- **Validation is interim (hand-rolled)** in `shared.ts` (status enum only),
-  marked `TODO(3.Q)`. An authoritative panel application-status zod schema is
-  needed from Security & QA (`@/lib/validation`, task 3.Q1), to be bound like the
-  other panel schemas (cf. 2.B6).
+- **Validation is authoritative (zod).** The status-update body is validated by
+  `panelApplicationStatusSchema` from `@/lib/validation` (Security & QA, 3.Q0),
+  bound in 3.B6 — `status` only (application content stays read-only). Who may
+  review stays in the route/guard.
 - **Response summary (for Frontend 3.F1):** success → `{ ok:true, ... }` with
   `applications` (list) / `application` (single) / `id` (delete); failure →
   `{ ok:false, error }`.

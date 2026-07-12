@@ -1,11 +1,10 @@
 import { requireApiRole } from "@/lib/auth/guard";
+import { createPresignedUpload } from "@/lib/utils/r2";
 import {
-  UPLOAD_ALLOWED_CONTENT_TYPES,
-  UPLOAD_MAX_BYTES,
-  createPresignedUpload,
-  isAllowedContentType,
-  type UploadContentType,
-} from "@/lib/utils/r2";
+  uploadRequestSchema,
+  buildUploadKey,
+  firstErrorMessage,
+} from "@/lib/validation";
 
 /**
  * Panel uploads — /api/panel/uploads
@@ -16,54 +15,15 @@ import {
  *
  * RBAC: admin + lead (the roles that may add documents). member → 403.
  *
- * Baseline validation only (content-type allow-list + declared-size cap).
- * TODO(3.S1): Security & QA hardens this — magic-byte sniffing, per-type caps,
- * and a hard server-enforced size limit (presigned POST + content-length-range).
- * The allow-list + size constant live in `@/lib/utils/r2` as the shared source.
+ * Validation is authoritative (Security & QA, task 3.S1): `uploadRequestSchema`
+ * checks contentType (shared allow-list), per-type + global size caps, and a
+ * strict fileName (no path separators / traversal / dangerous extensions);
+ * `buildUploadKey` produces the safe, unguessable object key. The upload
+ * allow-list + size constants live in `@/lib/utils/r2` — the single source both
+ * this route (via R2) and the schema import.
  *
  * See ./README.md for the full flow + response contract.
  */
-
-interface UploadRequest {
-  fileName: string;
-  contentType: UploadContentType;
-  size: number;
-}
-
-function validate(
-  body: unknown,
-): { ok: true; data: UploadRequest } | { ok: false; error: string } {
-  if (typeof body !== "object" || body === null) {
-    return { ok: false, error: "Request body must be a JSON object." };
-  }
-  const { fileName, contentType, size } = body as Record<string, unknown>;
-
-  if (typeof fileName !== "string" || fileName.trim().length === 0) {
-    return { ok: false, error: "fileName is required." };
-  }
-  if (fileName.length > 255) {
-    return { ok: false, error: "fileName is too long." };
-  }
-  if (typeof contentType !== "string" || !isAllowedContentType(contentType)) {
-    return {
-      ok: false,
-      error: `Unsupported contentType. Allowed: ${UPLOAD_ALLOWED_CONTENT_TYPES.join(", ")}.`,
-    };
-  }
-  if (
-    typeof size !== "number" ||
-    !Number.isFinite(size) ||
-    size <= 0 ||
-    size > UPLOAD_MAX_BYTES
-  ) {
-    return {
-      ok: false,
-      error: `size must be a number between 1 and ${UPLOAD_MAX_BYTES} bytes.`,
-    };
-  }
-
-  return { ok: true, data: { fileName, contentType, size } };
-}
 
 export async function POST(request: Request): Promise<Response> {
   const gate = await requireApiRole(["admin", "lead"]);
@@ -79,14 +39,20 @@ export async function POST(request: Request): Promise<Response> {
     );
   }
 
-  const parsed = validate(body);
-  if (!parsed.ok) {
-    return Response.json({ ok: false, error: parsed.error }, { status: 400 });
+  const parsed = uploadRequestSchema.safeParse(body);
+  if (!parsed.success) {
+    return Response.json(
+      { ok: false, error: firstErrorMessage(parsed.error) },
+      { status: 400 },
+    );
   }
+
+  // Authoritative key building (path-traversal-safe, uuid-prefixed).
+  const key = buildUploadKey(parsed.data.fileName);
 
   try {
     const result = await createPresignedUpload({
-      fileName: parsed.data.fileName,
+      key,
       contentType: parsed.data.contentType,
     });
     return Response.json({ ok: true, ...result });
