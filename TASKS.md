@@ -12,8 +12,8 @@
 
 | id | görev | agent | durum | bağımlılık |
 |----|-------|-------|-------|------------|
-| D1 | Deploy hazırlık: `docs/DEPLOY.md` (env + adım checklist) + .env.example tamlık denetimi + prod Auth/CSP/headers doğrulama + prod build kontrolü | Güvenlik & QA | in-progress | 3.Q1 |
-| D0 | **KULLANICI (manuel):** MongoDB Atlas URI · Resend API key + doğrulanmış gönderen · Cloudflare R2 (bucket+creds+public URL) · AUTH_SECRET üret · Vercel proje + GitHub bağla · tüm env'leri Vercel'e gir · admin seed çalıştır | Yusuf | todo | D1 |
+| D1 | Deploy hazırlık: `docs/DEPLOY.md` (env + adım checklist) + .env.example tamlık denetimi + prod Auth/CSP/headers doğrulama + prod build kontrolü | Güvenlik & QA | done | 3.Q1 |
+| D0 | **KULLANICI (manuel):** MongoDB Atlas URI · Resend API key + doğrulanmış gönderen · Cloudflare R2 (bucket+creds+public URL) · AUTH_SECRET üret · Vercel proje + GitHub bağla · tüm env'leri Vercel'e gir · admin seed çalıştır | Yusuf | in-progress | D1 |
 | D2 | Deploy sonrası smoke doğrulama (public sayfalar + giriş + panel + form + upload) + varsa prod hata düzeltme | Güvenlik & QA | todo | D0 |
 
 
@@ -331,3 +331,7 @@ oldukları için sırayla ilerler.
 - 2026-07-11 — Kullanıcı kararı: **Vercel deploy.** Şef: Faz D eklendi. Kod büyük
   ölçüde hazır (trustHost:true, R2_PUBLIC_BASE_URL var, vercel.json gereksiz).
   D1 açıldı (Güvenlik & QA — deploy hazırlık + DEPLOY.md). Push edildi.
+- 2026-07-12 — Şef: D1 done (docs/DEPLOY.md 135 satır, .env.example [ZORUNLU]/[ops]
+  işaretli + NEXT_PUBLIC_SITE_URL eklendi, CSP R2/harici görsele hizalandı, prod build
+  temiz). Sıra KULLANICIDA: D0 (provisioning + Vercel deploy) — DEPLOY.md'yi takip et.
+  Deploy sonrası D2 (smoke) açılacak. Push edildi.
