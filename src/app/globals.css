@@ -36,6 +36,11 @@
 }
 
 :root {
+  /* Tell the UA which scheme native controls (select/option popups, date &
+     number pickers, spinners, scrollbars, autofill) should paint with — without
+     this, dark-mode controls render on the UA-default white background while
+     inheriting the near-white `--foreground`, i.e. white-on-white. */
+  color-scheme: light;
   --background: #f6f8fb;
   --foreground: #0d1526;
   --surface: #ffffff;
@@ -45,6 +50,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    color-scheme: dark;
     --background: #0a0f1a;
     --foreground: #e7ecf5;
     --surface: #111827;
