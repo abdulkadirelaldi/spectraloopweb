@@ -21,4 +21,8 @@ export { Switch } from "./Switch";
 export type { SwitchProps } from "./Switch";
 export { Field } from "./Field";
 export type { FieldProps } from "./Field";
+export { Reveal } from "./Reveal";
+export type { RevealProps } from "./Reveal";
+export { CountUp } from "./CountUp";
+export type { CountUpProps } from "./CountUp";
 export { cn } from "./cn";

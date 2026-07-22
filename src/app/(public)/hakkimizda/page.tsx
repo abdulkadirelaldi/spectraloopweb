@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Card, Container, Section } from "@/components/ui";
+import { Card, Container, Reveal, Section } from "@/components/ui";
 import { PageHero } from "@/components/public/PageHero";
 import {
   TeamMemberCard,
@@ -45,27 +45,31 @@ export default function AboutPage() {
       <Section>
         <Container>
           <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <h2 className="text-foreground text-xl font-semibold">
-                Misyonumuz
-              </h2>
-              <p className="text-muted mt-3">
-                Sürdürülebilir ve yüksek hızlı ulaşım teknolojilerini
-                geliştirirken; öğrencilere gerçek mühendislik problemleri
-                üzerinde çalışma, takım hâlinde üretme ve kendini geliştirme
-                fırsatı sunmak.
-              </p>
-            </Card>
-            <Card>
-              <h2 className="text-foreground text-xl font-semibold">
-                Vizyonumuz
-              </h2>
-              <p className="text-muted mt-3">
-                Türkiye&apos;de hyperloop teknolojisinin öncü öğrenci
-                takımlarından biri olmak ve geleceğin ulaşım mühendislerini
-                yetiştiren bir topluluğa dönüşmek.
-              </p>
-            </Card>
+            <Reveal as="div">
+              <Card className="hover:border-brand-200 dark:hover:border-brand-500/40 h-full transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:shadow-md">
+                <h2 className="text-foreground text-xl font-semibold">
+                  Misyonumuz
+                </h2>
+                <p className="text-muted mt-3">
+                  Sürdürülebilir ve yüksek hızlı ulaşım teknolojilerini
+                  geliştirirken; öğrencilere gerçek mühendislik problemleri
+                  üzerinde çalışma, takım hâlinde üretme ve kendini geliştirme
+                  fırsatı sunmak.
+                </p>
+              </Card>
+            </Reveal>
+            <Reveal as="div" delay={100}>
+              <Card className="hover:border-brand-200 dark:hover:border-brand-500/40 h-full transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:shadow-md">
+                <h2 className="text-foreground text-xl font-semibold">
+                  Vizyonumuz
+                </h2>
+                <p className="text-muted mt-3">
+                  Türkiye&apos;de hyperloop teknolojisinin öncü öğrenci
+                  takımlarından biri olmak ve geleceğin ulaşım mühendislerini
+                  yetiştiren bir topluluğa dönüşmek.
+                </p>
+              </Card>
+            </Reveal>
           </div>
         </Container>
       </Section>
@@ -101,8 +105,13 @@ export default function AboutPage() {
             </div>
 
             <ol className="border-border relative flex flex-col gap-6 border-l pl-6">
-              {MILESTONES.map((milestone) => (
-                <li key={milestone.year} className="relative">
+              {MILESTONES.map((milestone, i) => (
+                <Reveal
+                  as="li"
+                  key={milestone.year}
+                  delay={i * 90}
+                  className="relative"
+                >
                   <span
                     aria-hidden="true"
                     className="border-surface bg-brand-500 absolute top-1 -left-[1.90rem] h-3 w-3 rounded-full border-2"
@@ -113,7 +122,7 @@ export default function AboutPage() {
                   <p className="text-foreground mt-1 text-sm">
                     {milestone.text}
                   </p>
-                </li>
+                </Reveal>
               ))}
             </ol>
           </div>
@@ -133,10 +142,10 @@ export default function AboutPage() {
             </p>
           </div>
           <ul className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-            {LEADERSHIP.map((member) => (
-              <li key={member.name}>
+            {LEADERSHIP.map((member, i) => (
+              <Reveal as="li" key={member.name} delay={(i % 4) * 80}>
                 <TeamMemberCard {...member} />
-              </li>
+              </Reveal>
             ))}
           </ul>
         </Container>

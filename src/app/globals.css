@@ -65,14 +65,208 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Respect users who prefer reduced motion. */
+/* Smooth in-page anchor scrolling; disabled under reduced-motion below.
+   scroll-margin keeps anchored targets clear of the sticky header. */
+html {
+  scroll-behavior: smooth;
+}
+
+:target {
+  scroll-margin-top: 5rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Motion system — public site (bold, tasteful). All animations move
+ * only transform/opacity (GPU-friendly). Content is fully visible by
+ * default: reveals are OPT-IN via JS/IntersectionObserver, and every
+ * animation is neutralised in the reduced-motion block at the bottom.
+ * ------------------------------------------------------------------ */
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --reveal-duration: 640ms;
+  --reveal-distance: 1.5rem;
+}
+
+/* Scroll reveal — driven by the <Reveal> client component. With NO
+   data-reveal attribute (SSR / no-JS / reduced-motion) the element is fully
+   visible. JS sets data-reveal="hidden" only for below-the-fold elements,
+   then "shown" when they scroll into view. */
+[data-reveal] {
+  transition:
+    opacity var(--reveal-duration) var(--ease-out),
+    transform var(--reveal-duration) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(var(--reveal-distance));
+  will-change: opacity, transform;
+}
+
+[data-reveal="shown"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Timeline connecting-line draw: grows from top when its container reveals. */
+.reveal-line {
+  transform-origin: top;
+}
+[data-reveal="hidden"] .reveal-line {
+  transform: scaleY(0);
+}
+[data-reveal] .reveal-line {
+  transition: transform 900ms var(--ease-out);
+  transition-delay: 120ms;
+}
+[data-reveal="shown"] .reveal-line,
+[data-reveal="hidden"]:not([data-reveal]) .reveal-line {
+  transform: scaleY(1);
+}
+
+/* Entrance animation for above-the-fold content (hero, page headers).
+   Runs on load via CSS only, so it never gates content behind JS. */
+@keyframes sl-fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.animate-fade-rise {
+  animation: sl-fade-rise 0.7s var(--ease-out) both;
+}
+
+/* Hero: slowly drifting gradient wash + floating accent orbs. */
+@keyframes sl-hero-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.hero-animated-gradient {
+  background:
+    radial-gradient(
+      130% 130% at 15% 15%,
+      var(--color-brand-500) 0%,
+      var(--color-brand-700) 45%,
+      var(--color-brand-800) 100%
+    ),
+    linear-gradient(
+      120deg,
+      var(--color-brand-700),
+      var(--color-brand-600),
+      var(--color-brand-800)
+    );
+  background-size:
+    100% 100%,
+    200% 200%;
+  animation: sl-hero-pan 18s var(--ease-in-out) infinite;
+}
+
+@keyframes sl-float {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(1.5rem, -1.75rem, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-float {
+  animation: sl-float 14s var(--ease-in-out) infinite;
+}
+
+.animate-float-slow {
+  animation: sl-float 22s var(--ease-in-out) infinite;
+}
+
+/* Faint grid texture overlay (used on the hero for depth). */
+.hero-grid {
+  background-image:
+    linear-gradient(to right, white 1px, transparent 1px),
+    linear-gradient(to bottom, white 1px, transparent 1px);
+  background-size: 56px 56px;
+  opacity: 0.06;
+}
+
+/* Sponsor marquee — seamless auto-scroll of a duplicated track. */
+@keyframes sl-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  overflow: hidden;
+}
+
+.marquee__track {
+  display: flex;
+  width: max-content;
+  animation: sl-marquee 40s linear infinite;
+}
+
+.marquee:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+/* Respect users who prefer reduced motion — neutralise every animation and
+   force revealed/entrance content to its final, fully-visible state. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
     scroll-behavior: auto !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  /* Never leave scroll-reveal content hidden for reduced-motion users. */
+  [data-reveal],
+  [data-reveal="hidden"] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .reveal-line {
+    transform: scaleY(1) !important;
+  }
+
+  /* Collapse the duplicated marquee track to a static, centered row. */
+  .marquee__track {
+    animation: none !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .marquee__dupe {
+    display: none !important;
   }
 }

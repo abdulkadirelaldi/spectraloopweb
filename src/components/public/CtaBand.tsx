@@ -1,11 +1,18 @@
-import { Button, Container, Section } from "@/components/ui";
+import { Button, Container, Reveal, Section } from "@/components/ui";
 
 /** Closing call-to-action band — repeats the sponsor + join invitation. */
 export function CtaBand() {
   return (
     <Section>
       <Container>
-        <div className="rounded-3xl border border-border bg-gradient-to-br from-brand-600 to-brand-800 px-6 py-14 text-center text-white sm:px-12">
+        <Reveal
+          as="div"
+          className="relative overflow-hidden rounded-3xl border border-border bg-gradient-to-br from-brand-600 to-brand-800 px-6 py-14 text-center text-white sm:px-12"
+        >
+          <span
+            aria-hidden="true"
+            className="animate-float pointer-events-none absolute -top-16 -right-10 h-56 w-56 rounded-full bg-accent-400/20 blur-3xl"
+          />
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
             Yolculuğa sen de katıl
           </h2>
@@ -30,7 +37,7 @@ export function CtaBand() {
               Sponsor Ol
             </Button>
           </div>
-        </div>
+        </Reveal>
       </Container>
     </Section>
   );

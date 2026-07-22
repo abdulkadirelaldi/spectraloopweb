@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Card, Container, Section } from "@/components/ui";
+import { Card, Container, Reveal, Section } from "@/components/ui";
 import { PageHero } from "@/components/public/PageHero";
 
 export const metadata: Metadata = {
@@ -61,18 +61,22 @@ export default function VehiclePage() {
             Teknik özellikler
           </h2>
           <dl className="mt-8 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-            {SPECS.map((spec) => (
-              <Card key={spec.label}>
-                <dt className="text-muted text-sm font-medium">{spec.label}</dt>
-                <dd className="text-brand-600 dark:text-brand-300 mt-2 text-3xl font-bold tracking-tight">
-                  {spec.value}
-                  {spec.unit ? (
-                    <span className="text-muted ml-1 text-base font-medium">
-                      {spec.unit}
-                    </span>
-                  ) : null}
-                </dd>
-              </Card>
+            {SPECS.map((spec, i) => (
+              <Reveal as="div" key={spec.label} delay={(i % 4) * 80}>
+                <Card className="hover:border-brand-200 dark:hover:border-brand-500/40 h-full transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:shadow-md">
+                  <dt className="text-muted text-sm font-medium">
+                    {spec.label}
+                  </dt>
+                  <dd className="text-brand-600 dark:text-brand-300 mt-2 text-3xl font-bold tracking-tight">
+                    {spec.value}
+                    {spec.unit ? (
+                      <span className="text-muted ml-1 text-base font-medium">
+                        {spec.unit}
+                      </span>
+                    ) : null}
+                  </dd>
+                </Card>
+              </Reveal>
             ))}
           </dl>
         </Container>
@@ -85,9 +89,9 @@ export default function VehiclePage() {
             Alt sistemler
           </h2>
           <ul className="mt-8 grid gap-6 md:grid-cols-2">
-            {SUBSYSTEMS.map((subsystem) => (
-              <li key={subsystem.title}>
-                <Card className="h-full">
+            {SUBSYSTEMS.map((subsystem, i) => (
+              <Reveal as="li" key={subsystem.title} delay={(i % 2) * 100}>
+                <Card className="hover:border-brand-200 dark:hover:border-brand-500/40 h-full transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:shadow-md">
                   <h3 className="text-foreground text-lg font-semibold">
                     {subsystem.title}
                   </h3>
@@ -95,7 +99,7 @@ export default function VehiclePage() {
                     {subsystem.description}
                   </p>
                 </Card>
-              </li>
+              </Reveal>
             ))}
           </ul>
         </Container>
@@ -108,8 +112,8 @@ export default function VehiclePage() {
             Görsel galeri
           </h2>
           <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {GALLERY.map((caption) => (
-              <li key={caption}>
+            {GALLERY.map((caption, i) => (
+              <Reveal as="li" key={caption} delay={(i % 3) * 90}>
                 <figure>
                   <div
                     role="img"
@@ -122,7 +126,7 @@ export default function VehiclePage() {
                     {caption}
                   </figcaption>
                 </figure>
-              </li>
+              </Reveal>
             ))}
           </ul>
         </Container>

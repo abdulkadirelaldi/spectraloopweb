@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Card, Container, Section } from "@/components/ui";
+import { Card, Container, CountUp, Reveal, Section } from "@/components/ui";
 import { PageHero } from "@/components/public/PageHero";
 import { Timeline, type TimelineItem } from "@/components/public/Timeline";
 
@@ -62,18 +62,21 @@ export default function AchievementsPage() {
       <Section>
         <Container>
           <dl className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
-            {HIGHLIGHTS.map((item) => (
-              <Card key={item.label} className="text-center">
-                <dt className="sr-only">{item.label}</dt>
-                <dd>
-                  <span className="text-brand-600 dark:text-brand-300 block text-4xl font-bold tracking-tight">
-                    {item.value}
-                  </span>
-                  <span className="text-muted mt-2 block text-sm font-medium">
-                    {item.label}
-                  </span>
-                </dd>
-              </Card>
+            {HIGHLIGHTS.map((item, i) => (
+              <Reveal as="div" key={item.label} delay={(i % 3) * 90}>
+                <Card className="hover:border-brand-200 dark:hover:border-brand-500/40 h-full text-center transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:shadow-md">
+                  <dt className="sr-only">{item.label}</dt>
+                  <dd>
+                    <CountUp
+                      value={item.value}
+                      className="text-brand-600 dark:text-brand-300 block text-4xl font-bold tracking-tight"
+                    />
+                    <span className="text-muted mt-2 block text-sm font-medium">
+                      {item.label}
+                    </span>
+                  </dd>
+                </Card>
+              </Reveal>
             ))}
           </dl>
         </Container>

@@ -20,7 +20,7 @@ export function PanelCard({
   return (
     <section
       className={cn(
-        "border-border bg-surface rounded-xl border p-5 shadow-sm",
+        "border-border bg-surface hover:border-border/70 rounded-xl border p-5 shadow-sm transition-colors duration-200",
         className,
       )}
     >
@@ -48,7 +48,7 @@ export type StatCardProps = {
 /** Compact metric card for panel dashboards. */
 export function StatCard({ label, value, hint }: StatCardProps) {
   return (
-    <div className="border-border bg-surface rounded-xl border p-5 shadow-sm">
+    <div className="border-border bg-surface rounded-xl border p-5 shadow-sm transition-shadow duration-200 hover:shadow-md">
       <p className="text-muted text-sm font-medium">{label}</p>
       <p className="text-foreground mt-2 text-3xl font-bold tracking-tight">
         {value}

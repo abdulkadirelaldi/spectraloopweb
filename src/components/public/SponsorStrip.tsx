@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { Badge, Card, Container, Section } from "@/components/ui";
+import { Container, Reveal, Section } from "@/components/ui";
 import type { Sponsor } from "@/types";
+import { SponsorMarquee } from "./SponsorMarquee";
 
 type SponsorsResponse =
   | { ok: true; sponsors: Sponsor[] }
@@ -41,62 +42,17 @@ export async function SponsorStrip() {
   return (
     <Section muted>
       <Container>
-        <div className="text-center">
+        <Reveal as="div" className="text-center">
           <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
             Bizi destekleyenler
           </h2>
           <p className="mx-auto mt-3 max-w-xl text-muted">
             Spectraloop&apos;u mümkün kılan sponsorlarımıza teşekkür ederiz.
           </p>
-        </div>
+        </Reveal>
 
         {sponsors.length > 0 ? (
-          <ul className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-            {sponsors.map((sponsor) => {
-              const logo = (
-                <>
-                  {/* External logo URLs (placehold.co / R2) — plain <img> avoids
-                      next.config remotePatterns coupling. */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={sponsor.logoUrl}
-                    alt={`${sponsor.name} logosu`}
-                    loading="lazy"
-                    className="h-12 w-auto max-w-full object-contain"
-                  />
-                  <span className="mt-3 flex items-center gap-2">
-                    <span className="text-sm font-medium text-foreground">
-                      {sponsor.name}
-                    </span>
-                    <Badge variant={sponsor.tier}>{sponsor.tier}</Badge>
-                  </span>
-                </>
-              );
-
-              return (
-                <li key={sponsor.id}>
-                  <Card
-                    interactive={Boolean(sponsor.website)}
-                    className="flex h-full flex-col items-center justify-center text-center"
-                  >
-                    {sponsor.website ? (
-                      <Link
-                        href={sponsor.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex flex-col items-center rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
-                        aria-label={`${sponsor.name} web sitesi (yeni sekmede açılır)`}
-                      >
-                        {logo}
-                      </Link>
-                    ) : (
-                      <div className="flex flex-col items-center">{logo}</div>
-                    )}
-                  </Card>
-                </li>
-              );
-            })}
-          </ul>
+          <SponsorMarquee sponsors={sponsors} />
         ) : (
           <div className="mt-10 text-center">
             <p className="text-muted">

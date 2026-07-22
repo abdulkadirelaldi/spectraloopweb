@@ -1,4 +1,4 @@
-import { Container, Section } from "@/components/ui";
+import { Container, Reveal, Section } from "@/components/ui";
 import type { Announcement } from "@/types";
 import { AnnouncementCard } from "./AnnouncementCard";
 
@@ -43,10 +43,10 @@ export async function NewsList() {
       <Container>
         {announcements.length > 0 ? (
           <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {announcements.map((announcement) => (
-              <li key={announcement.id}>
+            {announcements.map((announcement, i) => (
+              <Reveal as="li" key={announcement.id} delay={(i % 3) * 90}>
                 <AnnouncementCard announcement={announcement} />
-              </li>
+              </Reveal>
             ))}
           </ul>
         ) : (

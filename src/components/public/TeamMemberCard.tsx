@@ -27,7 +27,7 @@ export function TeamMemberCard({
   photoUrl,
 }: TeamMember) {
   return (
-    <Card className="flex flex-col items-center text-center">
+    <Card className="flex flex-col items-center text-center transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-md dark:hover:border-brand-500/40">
       {photoUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img

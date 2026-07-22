@@ -17,7 +17,7 @@ export function SubteamCard({
   responsibilities,
 }: SubteamInfo) {
   return (
-    <Card className="flex h-full flex-col">
+    <Card className="group flex h-full flex-col transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-brand-200 hover:shadow-md dark:hover:border-brand-500/40">
       <span
         aria-hidden="true"
         className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-lg font-bold text-brand-600 dark:bg-brand-500/15 dark:text-brand-300"

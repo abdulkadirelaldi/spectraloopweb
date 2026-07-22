@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
-import { Badge, Button, Card, Container, Section, cn } from "@/components/ui";
+import {
+  Badge,
+  Button,
+  Card,
+  Container,
+  Reveal,
+  Section,
+  cn,
+} from "@/components/ui";
 import type { SponsorTier } from "@/types";
 import { ContactForm } from "@/components/public/ContactForm";
 import { PageHero } from "@/components/public/PageHero";
@@ -73,12 +81,14 @@ export default function SponsorshipPage() {
           </div>
 
           <ul className="mt-10 grid gap-6 lg:grid-cols-3">
-            {TIERS.map((tier) => (
-              <li key={tier.tier}>
+            {TIERS.map((tier, i) => (
+              <Reveal as="li" key={tier.tier} delay={i * 100}>
                 <Card
                   className={cn(
-                    "flex h-full flex-col",
-                    tier.featured && "ring-brand-500 ring-2",
+                    "flex h-full flex-col transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:shadow-md",
+                    tier.featured
+                      ? "ring-brand-500 ring-2"
+                      : "hover:border-brand-200 dark:hover:border-brand-500/40",
                   )}
                 >
                   <div className="flex items-center justify-between">
@@ -103,7 +113,7 @@ export default function SponsorshipPage() {
                     ))}
                   </ul>
                 </Card>
-              </li>
+              </Reveal>
             ))}
           </ul>
         </Container>
@@ -112,7 +122,10 @@ export default function SponsorshipPage() {
       {/* PDF download */}
       <Section muted>
         <Container>
-          <div className="border-border bg-surface flex flex-col items-start gap-4 rounded-3xl border p-8 sm:flex-row sm:items-center sm:justify-between">
+          <Reveal
+            as="div"
+            className="border-border bg-surface flex flex-col items-start gap-4 rounded-3xl border p-8 sm:flex-row sm:items-center sm:justify-between"
+          >
             <div>
               <h2 className="text-foreground text-xl font-semibold">
                 Sponsorluk dosyası
@@ -130,7 +143,7 @@ export default function SponsorshipPage() {
             >
               Dosyayı indir (PDF)
             </Button>
-          </div>
+          </Reveal>
         </Container>
       </Section>
 

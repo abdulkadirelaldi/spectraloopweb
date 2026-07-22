@@ -12,7 +12,8 @@ export function Card({ interactive, className, ...rest }: CardProps) {
     <div
       className={cn(
         "border-border bg-surface rounded-2xl border p-6 shadow-sm",
-        interactive && "transition-shadow hover:shadow-md",
+        interactive &&
+          "hover:border-brand-200 dark:hover:border-brand-500/40 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:shadow-md",
         className,
       )}
       {...rest}

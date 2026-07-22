@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { cn } from "@/components/ui/cn";
@@ -17,10 +17,37 @@ function isActive(pathname: string, href: string): boolean {
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const closeMenu = () => setOpen(false);
 
+  // Intensify the header background/shadow once the page is scrolled. A passive
+  // listener that only reads scrollY (no layout reads) keeps this cheap; an rAF
+  // guard coalesces bursts of scroll events into one state update per frame.
+  useEffect(() => {
+    let ticking = false;
+    const update = () => {
+      setScrolled(window.scrollY > 8);
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur">
+    <header
+      className={cn(
+        "sticky top-0 z-50 border-b transition-[background-color,box-shadow,border-color] duration-300",
+        scrolled
+          ? "border-border bg-background/90 shadow-sm backdrop-blur-md"
+          : "border-transparent bg-background/70 backdrop-blur",
+      )}
+    >
       <Container size="wide">
         <div className="flex h-16 items-center justify-between gap-4">
           <Logo />
@@ -38,10 +65,11 @@ export function Header() {
                   href={link.href}
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                    "relative rounded-full px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                    "after:absolute after:inset-x-3 after:bottom-1 after:h-0.5 after:origin-left after:rounded-full after:bg-brand after:transition-transform after:duration-300",
                     active
-                      ? "text-brand-600 dark:text-brand-300"
-                      : "text-muted hover:text-foreground",
+                      ? "text-brand-600 after:scale-x-100 dark:text-brand-300"
+                      : "text-muted after:scale-x-0 hover:text-foreground hover:after:scale-x-100",
                   )}
                 >
                   {link.label}

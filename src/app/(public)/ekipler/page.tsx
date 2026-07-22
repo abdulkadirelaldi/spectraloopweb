@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Button, Container, Section } from "@/components/ui";
+import { Button, Container, Reveal, Section } from "@/components/ui";
 import { PageHero } from "@/components/public/PageHero";
 import { SubteamCard, type SubteamInfo } from "@/components/public/SubteamCard";
 
@@ -69,10 +69,10 @@ export default function TeamsPage() {
       <Section>
         <Container>
           <ul className="grid gap-6 md:grid-cols-2">
-            {SUBTEAMS.map((subteam) => (
-              <li key={subteam.name}>
+            {SUBTEAMS.map((subteam, i) => (
+              <Reveal as="li" key={subteam.name} delay={(i % 2) * 100}>
                 <SubteamCard {...subteam} />
-              </li>
+              </Reveal>
             ))}
           </ul>
         </Container>
@@ -80,7 +80,10 @@ export default function TeamsPage() {
 
       <Section muted>
         <Container>
-          <div className="border-border bg-surface rounded-3xl border px-6 py-12 text-center sm:px-12">
+          <Reveal
+            as="div"
+            className="border-border bg-surface rounded-3xl border px-6 py-12 text-center sm:px-12"
+          >
             <h2 className="text-foreground text-2xl font-bold tracking-tight sm:text-3xl">
               Bir ekipte yer almak ister misin?
             </h2>
@@ -93,7 +96,7 @@ export default function TeamsPage() {
                 Bize Katıl
               </Button>
             </div>
-          </div>
+          </Reveal>
         </Container>
       </Section>
     </>
